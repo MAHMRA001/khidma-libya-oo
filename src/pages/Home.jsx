@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, ChevronRight, Plus, AlertCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
@@ -7,7 +7,8 @@ import CategoryIcon from "../components/common/CategoryIcon";
 import WorkerCard from "../components/cards/WorkerCard";
 import JobCard from "../components/cards/JobCard";
 import { CATEGORIES, CITIES_AR } from "../lib/i18n";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import usePullToRefresh from "../hooks/usePullToRefresh";
 
 export default function Home() {
   const { t, lang, rtl } = useLanguage();
@@ -19,15 +20,39 @@ export default function Home() {
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
-    base44.entities.WorkerProfile.list('-created_date', 6).then(setWorkers).catch(() => {});
-    base44.entities.JobPost.filter({ status: 'open' }, '-created_date', 4).then(setJobs).catch(() => {});
+    loadAll();
   }, []);
+
+  const loadAll = useCallback(async () => {
+    const [w, j] = await Promise.all([
+      base44.entities.WorkerProfile.list('-created_date', 6).catch(() => []),
+      base44.entities.JobPost.filter({ status: 'open' }, '-created_date', 4).catch(() => []),
+    ]);
+    setWorkers(w);
+    setJobs(j);
+  }, []);
+
+  const { refreshing } = usePullToRefresh(loadAll);
 
   const featuredWorkers = workers.filter(w => w.verification_status === 'verified' || w.is_featured).slice(0, 4);
   const displayWorkers = featuredWorkers.length > 0 ? featuredWorkers : workers.slice(0, 4);
 
   return (
     <div className={`min-h-screen ${rtl ? 'font-arabic' : 'font-sans'}`}>
+      {/* Pull to refresh indicator */}
+      <AnimatePresence>
+        {refreshing && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-card border border-border rounded-full px-4 py-2 flex items-center gap-2 shadow-lg"
+          >
+            <div className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+            <span className="text-xs font-medium">Refreshing...</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
       {/* Header */}
       <div className="bg-primary text-primary-foreground px-5 pt-12 pb-8 rounded-b-[2rem]">
         <div className="max-w-lg mx-auto">

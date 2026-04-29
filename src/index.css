@@ -88,5 +88,16 @@
   }
   body {
     @apply bg-background text-foreground;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  button,
+  a {
+    -webkit-touch-callout: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .fixed {
+    -webkit-touch-callout: none;
   }
 }

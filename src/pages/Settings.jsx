@@ -1,14 +1,27 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Globe, Moon, Sun, Info } from "lucide-react";
+import { ArrowLeft, Globe, Info, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import useLanguage from "../hooks/useLanguage";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function Settings() {
   const { t, lang, rtl, switchLanguage } = useLanguage();
   const navigate = useNavigate();
   const [, setForceRender] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    // Clear user data then logout
+    await base44.auth.updateMe({ account_type: null, deleted: true }).catch(() => {});
+    base44.auth.logout('/welcome');
+  };
 
   const handleLangSwitch = (newLang) => {
     switchLanguage(newLang);
@@ -70,7 +83,37 @@ export default function Settings() {
           </div>
         </div>
 
-        <div className="mt-8 text-center">
+        {/* Account Deletion */}
+        <div className="mt-6">
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="ghost" className="w-full rounded-xl text-destructive hover:text-destructive hover:bg-destructive/5 gap-2">
+                <Trash2 className="w-4 h-4" />
+                Delete Account
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Account?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will permanently remove your profile, job posts, messages, and all associated data. This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDeleteAccount}
+                  disabled={deleting}
+                  className="bg-destructive hover:bg-destructive/90"
+                >
+                  {deleting ? 'Deleting...' : 'Yes, Delete'}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+
+        <div className="mt-4 text-center">
           <p className="text-xs text-muted-foreground">Khidma Libya v1.0</p>
           <p className="text-xs text-muted-foreground font-arabic">خدمة ليبيا</p>
         </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ArrowLeft, SlidersHorizontal, Map } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
@@ -7,6 +7,8 @@ import WorkerCard from "../components/cards/WorkerCard";
 import CategoryIcon from "../components/common/CategoryIcon";
 import { CATEGORIES, CITIES, CITIES_AR } from "../lib/i18n";
 import { Button } from "@/components/ui/button";
+import usePullToRefresh from "../hooks/usePullToRefresh";
+import { AnimatePresence, motion } from "framer-motion";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 
@@ -23,25 +25,19 @@ export default function WorkerList() {
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [searchQuery] = useState(urlParams.get('search') || '');
 
-  useEffect(() => {
-    loadWorkers();
-  }, [category, city, verifiedOnly]);
-
-  const loadWorkers = async () => {
+  const loadWorkers = useCallback(async () => {
     setLoading(true);
     const filter = {};
     if (category) filter.category = category;
     if (city) filter.city = city;
     if (verifiedOnly) filter.verification_status = 'verified';
-    
     const data = Object.keys(filter).length > 0
       ? await base44.entities.WorkerProfile.filter(filter, '-created_date', 50)
       : await base44.entities.WorkerProfile.list('-created_date', 50);
-    
     let filtered = data;
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      filtered = data.filter(w => 
+      filtered = data.filter(w =>
         w.full_name?.toLowerCase().includes(q) ||
         w.description?.toLowerCase().includes(q) ||
         w.full_name_ar?.includes(q) ||
@@ -50,7 +46,15 @@ export default function WorkerList() {
     }
     setWorkers(filtered);
     setLoading(false);
-  };
+  }, [category, city, verifiedOnly, searchQuery]);
+
+  const { refreshing } = usePullToRefresh(loadWorkers);
+
+  useEffect(() => {
+    loadWorkers();
+  }, [loadWorkers]);
+
+
 
   return (
     <div className={`min-h-screen ${rtl ? 'font-arabic' : 'font-sans'}`}>
@@ -149,6 +153,21 @@ export default function WorkerList() {
             </button>
           ))}
         </div>
+
+        {/* Pull to refresh indicator */}
+        <AnimatePresence>
+          {refreshing && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="flex items-center justify-center gap-2 py-3"
+            >
+              <div className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+              <span className="text-xs text-muted-foreground">Refreshing...</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Results */}
         {loading ? (

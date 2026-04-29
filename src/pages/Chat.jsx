@@ -36,17 +36,22 @@ export default function Chat() {
 
     // Mark as read
     if (c?.unread_by?.includes(u.email)) {
-      const newUnread = c.unread_by.filter(e => e !== u.email);
-      await base44.entities.Conversation.update(id, { unread_by: newUnread });
+      await base44.entities.Conversation.update(id, {
+        unread_by: c.unread_by.filter(e => e !== u.email),
+      });
     }
   };
 
   useEffect(() => {
     const unsub = base44.entities.Message.subscribe((event) => {
-      if (event.data?.conversation_id === id) {
-        if (event.type === 'create') {
-          setMessages(prev => [...prev, event.data]);
-        }
+      if (event.data?.conversation_id === id && event.type === 'create') {
+        setMessages(prev => {
+          // Replace optimistic or append
+          const withoutOptimistic = prev.filter(m => !m.id?.startsWith('temp_'));
+          const exists = withoutOptimistic.find(m => m.id === event.data.id);
+          if (exists) return prev;
+          return [...withoutOptimistic, event.data];
+        });
       }
     });
     return unsub;
@@ -57,7 +62,17 @@ export default function Chat() {
     setSending(true);
     const msg = text.trim();
     setText("");
-    
+
+    // Optimistic update
+    const tempMsg = {
+      id: `temp_${Date.now()}`,
+      conversation_id: id,
+      sender_email: user.email,
+      text: msg,
+      created_date: new Date().toISOString(),
+    };
+    setMessages(prev => [...prev, tempMsg]);
+
     await base44.entities.Message.create({
       conversation_id: id,
       sender_email: user.email,
@@ -66,7 +81,6 @@ export default function Chat() {
       read: false,
     });
 
-    // Update conversation
     const otherEmails = convo.participant_emails?.filter(e => e !== user.email) || [];
     await base44.entities.Conversation.update(id, {
       last_message: msg,
@@ -86,7 +100,10 @@ export default function Chat() {
   return (
     <div className={`flex flex-col h-screen ${rtl ? 'font-arabic' : 'font-sans'}`}>
       {/* Header */}
-      <div className="sticky top-0 z-40 bg-card border-b border-border px-5 py-3 flex-shrink-0">
+      <div
+        className="sticky top-0 z-40 bg-card border-b border-border px-5 py-3 flex-shrink-0"
+        style={{ paddingTop: 'calc(0.75rem + env(safe-area-inset-top))' }}
+      >
         <div className="max-w-lg mx-auto flex items-center gap-3">
           <button onClick={() => navigate(-1)} className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-secondary">
             <ArrowLeft className="w-5 h-5" />
@@ -103,13 +120,14 @@ export default function Chat() {
         <div className="space-y-3">
           {messages.map((msg) => {
             const isMe = msg.sender_email === user?.email;
+            const isOptimistic = msg.id?.startsWith('temp_');
             return (
               <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-sm ${
+                <div className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-sm transition-opacity ${
                   isMe
                     ? 'bg-primary text-primary-foreground rounded-br-sm'
                     : 'bg-card border border-border text-foreground rounded-bl-sm'
-                }`}>
+                } ${isOptimistic ? 'opacity-70' : 'opacity-100'}`}>
                   <p className="leading-relaxed">{msg.text}</p>
                   <p className={`text-[10px] mt-1 ${isMe ? 'text-primary-foreground/60' : 'text-muted-foreground'}`}>
                     {moment(msg.created_date).format('HH:mm')}
@@ -123,7 +141,10 @@ export default function Chat() {
       </div>
 
       {/* Input */}
-      <div className="flex-shrink-0 bg-card border-t border-border px-5 py-3 pb-safe">
+      <div
+        className="flex-shrink-0 bg-card border-t border-border px-5 py-3"
+        style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
+      >
         <div className="max-w-lg mx-auto flex items-center gap-2">
           <input
             type="text"

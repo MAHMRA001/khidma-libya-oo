@@ -1,32 +1,35 @@
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Home, Briefcase, User, Settings, Shield, MessageCircle } from "lucide-react";
 import useLanguage from "../../hooks/useLanguage";
 import { base44 } from "@/api/base44Client";
 
 export default function AppLayout() {
-  const { t, rtl, lang } = useLanguage();
+  const { t, rtl } = useLanguage();
   const location = useLocation();
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
   }, []);
 
-  const isAdmin = user?.role === 'admin';
-  const [unreadCount, setUnreadCount] = useState(0);
-
   useEffect(() => {
     if (!user) return;
     const checkUnread = async () => {
       const convos = await base44.entities.Conversation.list('-last_message_at', 50);
-      const count = convos.filter(c => c.participant_emails?.includes(user.email) && c.unread_by?.includes(user.email)).length;
+      const count = convos.filter(c =>
+        c.participant_emails?.includes(user.email) && c.unread_by?.includes(user.email)
+      ).length;
       setUnreadCount(count);
     };
     checkUnread();
     const unsub = base44.entities.Conversation.subscribe(() => checkUnread());
     return unsub;
   }, [user]);
+
+  const isAdmin = user?.role === 'admin';
 
   const navItems = [
     { path: "/", icon: Home, label: t.home },
@@ -42,24 +45,31 @@ export default function AppLayout() {
 
   return (
     <div className={`min-h-screen bg-background ${rtl ? 'font-arabic' : 'font-sans'}`} dir={rtl ? 'rtl' : 'ltr'}>
-      <main className="pb-20">
+      <main style={{ paddingBottom: 'calc(5rem + env(safe-area-inset-bottom))' }}>
         <Outlet />
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50">
+      <nav
+        className="fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+      >
         <div className="max-w-lg mx-auto flex items-center justify-around py-2">
           {navItems.map((item) => {
-            const isActive = location.pathname === item.path || 
+            const isActive = location.pathname === item.path ||
               (item.path !== "/" && location.pathname.startsWith(item.path));
             return (
-              <Link
+              <button
                 key={item.path}
-                to={item.path}
+                onClick={() => {
+                  if (isActive) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  } else {
+                    navigate(item.path);
+                  }
+                }}
                 className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all ${
-                  isActive 
-                    ? 'text-primary' 
-                    : 'text-muted-foreground hover:text-foreground'
+                  isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 <div className="relative">
@@ -71,7 +81,7 @@ export default function AppLayout() {
                   )}
                 </div>
                 <span className="text-[10px] font-medium">{item.label}</span>
-              </Link>
+              </button>
             );
           })}
         </div>
