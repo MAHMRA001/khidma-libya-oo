@@ -1,8 +1,14 @@
-import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Home, Briefcase, User, Settings, Shield, MessageCircle } from "lucide-react";
+import { Home as HomeIcon, Briefcase, User, Settings, Shield, MessageCircle } from "lucide-react";
 import useLanguage from "../../hooks/useLanguage";
 import { base44 } from "@/api/base44Client";
+import Home from "../../pages/Home";
+import JobPosts from "../../pages/JobPosts";
+import Messages from "../../pages/Messages";
+import Profile from "../../pages/Profile";
+
+const TAB_PATHS = ['/', '/jobs', '/messages', '/profile'];
 
 export default function AppLayout() {
   const { t, rtl } = useLanguage();
@@ -10,6 +16,11 @@ export default function AppLayout() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [unreadCount, setUnreadCount] = useState(0);
+
+  // Lazy-mount: only mount a tab once first visited
+  const [mountedTabs, setMountedTabs] = useState(() => ({
+    [TAB_PATHS.includes(location.pathname) ? location.pathname : '/']: true,
+  }));
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
@@ -30,23 +41,57 @@ export default function AppLayout() {
   }, [user]);
 
   const isAdmin = user?.role === 'admin';
+  const isTabPath = TAB_PATHS.includes(location.pathname);
 
   const navItems = [
-    { path: "/", icon: Home, label: t.home },
-    { path: "/jobs", icon: Briefcase, label: t.jobs },
-    { path: "/messages", icon: MessageCircle, label: t.message || 'Messages', badge: unreadCount },
-    { path: "/profile", icon: User, label: t.profile },
-    { path: "/settings", icon: Settings, label: t.settings },
+    { path: '/', icon: HomeIcon, label: t.home },
+    { path: '/jobs', icon: Briefcase, label: t.jobs },
+    { path: '/messages', icon: MessageCircle, label: t.message || 'Messages', badge: unreadCount },
+    { path: '/profile', icon: User, label: t.profile },
+    { path: '/settings', icon: Settings, label: t.settings },
   ];
 
   if (isAdmin) {
-    navItems.splice(3, 0, { path: "/admin", icon: Shield, label: t.admin });
+    navItems.splice(3, 0, { path: '/admin', icon: Shield, label: t.admin });
   }
+
+  const handleTabPress = (path) => {
+    if (location.pathname === path) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      setMountedTabs(prev => ({ ...prev, [path]: true }));
+      navigate(path);
+    }
+  };
 
   return (
     <div className={`min-h-screen bg-background ${rtl ? 'font-arabic' : 'font-sans'}`} dir={rtl ? 'rtl' : 'ltr'}>
       <main style={{ paddingBottom: 'calc(5rem + env(safe-area-inset-bottom))' }}>
-        <Outlet />
+
+        {/* Always-mounted tab pages — hidden/visible via CSS */}
+        {mountedTabs['/'] && (
+          <div style={{ display: location.pathname === '/' ? 'block' : 'none' }}>
+            <Home />
+          </div>
+        )}
+        {mountedTabs['/jobs'] && (
+          <div style={{ display: location.pathname === '/jobs' ? 'block' : 'none' }}>
+            <JobPosts />
+          </div>
+        )}
+        {mountedTabs['/messages'] && (
+          <div style={{ display: location.pathname === '/messages' ? 'block' : 'none' }}>
+            <Messages />
+          </div>
+        )}
+        {mountedTabs['/profile'] && (
+          <div style={{ display: location.pathname === '/profile' ? 'block' : 'none' }}>
+            <Profile />
+          </div>
+        )}
+
+        {/* Non-tab pages rendered via Outlet */}
+        {!isTabPath && <Outlet />}
       </main>
 
       {/* Bottom Navigation */}
@@ -57,17 +102,11 @@ export default function AppLayout() {
         <div className="max-w-lg mx-auto flex items-center justify-around py-2">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path ||
-              (item.path !== "/" && location.pathname.startsWith(item.path));
+              (item.path !== '/' && location.pathname.startsWith(item.path));
             return (
               <button
                 key={item.path}
-                onClick={() => {
-                  if (isActive) {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  } else {
-                    navigate(item.path);
-                  }
-                }}
+                onClick={() => handleTabPress(item.path)}
                 className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all ${
                   isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
                 }`}

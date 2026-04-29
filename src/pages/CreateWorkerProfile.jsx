@@ -7,7 +7,7 @@ import { CATEGORIES, CITIES, CITIES_AR } from "../lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import NativePicker from "../components/common/NativePicker";
 import { toast } from "sonner";
 
 export default function CreateWorkerProfile() {
@@ -118,14 +118,7 @@ export default function CreateWorkerProfile() {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm font-medium mb-1.5 block">{t.city} *</label>
-            <Select value={form.city} onValueChange={(v) => setForm(p => ({...p, city: v}))}>
-              <SelectTrigger className="rounded-xl"><SelectValue placeholder={t.city} /></SelectTrigger>
-              <SelectContent>
-                {CITIES.map(c => (
-                  <SelectItem key={c} value={c}>{lang === 'ar' ? CITIES_AR[c] : c}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <NativePicker value={form.city} onValueChange={(v) => setForm(p => ({...p, city: v}))} placeholder={t.city} options={CITIES.map(c => ({ value: c, label: lang === 'ar' ? CITIES_AR[c] : c }))} className="rounded-xl" />
           </div>
           <div>
             <label className="text-sm font-medium mb-1.5 block">{t.nationality}</label>
@@ -135,14 +128,7 @@ export default function CreateWorkerProfile() {
 
         <div>
           <label className="text-sm font-medium mb-1.5 block">{t.categories} *</label>
-          <Select value={form.category} onValueChange={(v) => setForm(p => ({...p, category: v}))}>
-            <SelectTrigger className="rounded-xl"><SelectValue placeholder={t.categories} /></SelectTrigger>
-            <SelectContent>
-              {CATEGORIES.map(cat => (
-                <SelectItem key={cat} value={cat}>{t[cat]}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <NativePicker value={form.category} onValueChange={(v) => setForm(p => ({...p, category: v}))} placeholder={t.categories} options={CATEGORIES.map(cat => ({ value: cat, label: t[cat] }))} className="rounded-xl" />
         </div>
 
         <div>

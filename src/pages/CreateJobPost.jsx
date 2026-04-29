@@ -7,7 +7,7 @@ import { CATEGORIES, CITIES, CITIES_AR } from "../lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import NativePicker from "../components/common/NativePicker";
 import { toast } from "sonner";
 
 export default function CreateJobPost() {
@@ -69,25 +69,11 @@ export default function CreateJobPost() {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm font-medium mb-1.5 block">{t.categories} *</label>
-            <Select value={form.category} onValueChange={(v) => setForm(p => ({...p, category: v}))}>
-              <SelectTrigger className="rounded-xl"><SelectValue placeholder={t.categories} /></SelectTrigger>
-              <SelectContent>
-                {CATEGORIES.map(cat => (
-                  <SelectItem key={cat} value={cat}>{t[cat]}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <NativePicker value={form.category} onValueChange={(v) => setForm(p => ({...p, category: v}))} placeholder={t.categories} options={CATEGORIES.map(cat => ({ value: cat, label: t[cat] }))} className="rounded-xl" />
           </div>
           <div>
             <label className="text-sm font-medium mb-1.5 block">{t.city} *</label>
-            <Select value={form.city} onValueChange={(v) => setForm(p => ({...p, city: v}))}>
-              <SelectTrigger className="rounded-xl"><SelectValue placeholder={t.city} /></SelectTrigger>
-              <SelectContent>
-                {CITIES.map(c => (
-                  <SelectItem key={c} value={c}>{lang === 'ar' ? CITIES_AR[c] : c}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <NativePicker value={form.city} onValueChange={(v) => setForm(p => ({...p, city: v}))} placeholder={t.city} options={CITIES.map(c => ({ value: c, label: lang === 'ar' ? CITIES_AR[c] : c }))} className="rounded-xl" />
           </div>
         </div>
 
@@ -108,26 +94,14 @@ export default function CreateJobPost() {
           </div>
           <div>
             <label className="text-sm font-medium mb-1.5 block">{t.urgency}</label>
-            <Select value={form.urgency} onValueChange={(v) => setForm(p => ({...p, urgency: v}))}>
-              <SelectTrigger className="rounded-xl"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="normal">{t.normal}</SelectItem>
-                <SelectItem value="urgent">{t.urgent}</SelectItem>
-              </SelectContent>
-            </Select>
+            <NativePicker value={form.urgency} onValueChange={(v) => setForm(p => ({...p, urgency: v}))} placeholder={t.urgency} options={[{ value: 'normal', label: t.normal }, { value: 'urgent', label: t.urgent }]} className="rounded-xl" />
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm font-medium mb-1.5 block">{t.contact_method}</label>
-            <Select value={form.contact_method} onValueChange={(v) => setForm(p => ({...p, contact_method: v}))}>
-              <SelectTrigger className="rounded-xl"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="phone">{t.phone}</SelectItem>
-                <SelectItem value="whatsapp">WhatsApp</SelectItem>
-              </SelectContent>
-            </Select>
+            <NativePicker value={form.contact_method} onValueChange={(v) => setForm(p => ({...p, contact_method: v}))} placeholder={t.contact_method} options={[{ value: 'phone', label: t.phone }, { value: 'whatsapp', label: 'WhatsApp' }]} className="rounded-xl" />
           </div>
           <div>
             <label className="text-sm font-medium mb-1.5 block">{t.contact_info} *</label>

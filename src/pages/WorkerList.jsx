@@ -9,7 +9,7 @@ import { CATEGORIES, CITIES, CITIES_AR } from "../lib/i18n";
 import { Button } from "@/components/ui/button";
 import usePullToRefresh from "../hooks/usePullToRefresh";
 import { AnimatePresence, motion } from "framer-motion";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import NativePicker from "../components/common/NativePicker";
 import { Switch } from "@/components/ui/switch";
 
 export default function WorkerList() {
@@ -87,32 +87,12 @@ export default function WorkerList() {
           <div className="mb-4 p-4 rounded-2xl bg-card border border-border space-y-4">
             <div>
               <label className="text-xs font-medium text-muted-foreground mb-1.5 block">{t.categories}</label>
-              <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger className="rounded-xl">
-                  <SelectValue placeholder={t.all_categories} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{t.all_categories}</SelectItem>
-                  {CATEGORIES.map(cat => (
-                    <SelectItem key={cat} value={cat}>{t[cat]}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <NativePicker value={category} onValueChange={setCategory} placeholder={t.all_categories} options={[{ value: 'all', label: t.all_categories }, ...CATEGORIES.map(cat => ({ value: cat, label: t[cat] }))]} className="rounded-xl" />
             </div>
 
             <div>
               <label className="text-xs font-medium text-muted-foreground mb-1.5 block">{t.city}</label>
-              <Select value={city} onValueChange={setCity}>
-                <SelectTrigger className="rounded-xl">
-                  <SelectValue placeholder={t.all_cities} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{t.all_cities}</SelectItem>
-                  {CITIES.map(c => (
-                    <SelectItem key={c} value={c}>{lang === 'ar' ? CITIES_AR[c] : c}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <NativePicker value={city} onValueChange={setCity} placeholder={t.all_cities} options={[{ value: 'all', label: t.all_cities }, ...CITIES.map(c => ({ value: c, label: lang === 'ar' ? CITIES_AR[c] : c }))]} className="rounded-xl" />
             </div>
 
             <div className="flex items-center justify-between">

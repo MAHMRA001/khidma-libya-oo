@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
@@ -22,32 +23,37 @@ import Messages from './pages/Messages';
 import Chat from './pages/Chat';
 import WorkerMap from './pages/WorkerMap';
 
+
+
+const TAB_PATHS_ANIM = ['/', '/jobs', '/messages', '/profile'];
+
 const AnimatedRoutes = () => {
   const location = useLocation();
+  const isTabPath = TAB_PATHS_ANIM.includes(location.pathname);
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={location.pathname}
-        initial={{ opacity: 0, x: 18 }}
+        key={isTabPath ? 'tabs' : location.pathname}
+        initial={isTabPath ? {} : { opacity: 0, x: 18 }}
         animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -18 }}
+        exit={isTabPath ? {} : { opacity: 0, x: -18 }}
         transition={{ duration: 0.18, ease: 'easeOut' }}
         style={{ position: 'relative', width: '100%' }}
       >
         <Routes location={location}>
           <Route path="/welcome" element={<Welcome />} />
           <Route element={<AppLayout />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={null} />
             <Route path="/workers" element={<WorkerList />} />
             <Route path="/worker/:id" element={<WorkerProfile />} />
             <Route path="/create-worker-profile" element={<CreateWorkerProfile />} />
             <Route path="/create-job" element={<CreateJobPost />} />
-            <Route path="/jobs" element={<JobPosts />} />
+            <Route path="/jobs" element={null} />
             <Route path="/job/:id" element={<JobDetail />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={null} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/messages" element={<Messages />} />
+            <Route path="/messages" element={null} />
             <Route path="/map" element={<WorkerMap />} />
           </Route>
           <Route path="/chat/:id" element={<Chat />} />
@@ -82,6 +88,14 @@ const AuthenticatedApp = () => {
 };
 
 function App() {
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const apply = (e) => document.documentElement.classList.toggle('dark', e.matches);
+    apply(mq);
+    mq.addEventListener('change', apply);
+    return () => mq.removeEventListener('change', apply);
+  }, []);
+
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
