@@ -1,0 +1,52 @@
+{
+  "name": "Report",
+  "type": "object",
+  "properties": {
+    "reported_type": {
+      "type": "string",
+      "enum": [
+        "worker",
+        "job_post",
+        "user"
+      ],
+      "description": "Type of entity being reported"
+    },
+    "reported_id": {
+      "type": "string",
+      "description": "ID of reported entity"
+    },
+    "reported_name": {
+      "type": "string"
+    },
+    "reporter_email": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string",
+      "enum": [
+        "fake_profile",
+        "scam",
+        "inappropriate",
+        "spam",
+        "other"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "reviewed",
+        "resolved"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "reported_type",
+    "reported_id",
+    "reason"
+  ]
+}

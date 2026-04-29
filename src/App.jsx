@@ -5,7 +5,18 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
-// Add page imports here
+import AppLayout from './components/layout/AppLayout';
+import Welcome from './pages/Welcome';
+import Home from './pages/Home';
+import WorkerList from './pages/WorkerList';
+import WorkerProfile from './pages/WorkerProfile';
+import CreateWorkerProfile from './pages/CreateWorkerProfile';
+import CreateJobPost from './pages/CreateJobPost';
+import JobPosts from './pages/JobPosts';
+import JobDetail from './pages/JobDetail';
+import Profile from './pages/Profile';
+import Settings from './pages/Settings';
+import AdminDashboard from './pages/AdminDashboard';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -33,7 +44,19 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
-      {/* Add your page Route elements here */}
+      <Route path="/welcome" element={<Welcome />} />
+      <Route element={<AppLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/workers" element={<WorkerList />} />
+        <Route path="/worker/:id" element={<WorkerProfile />} />
+        <Route path="/create-worker-profile" element={<CreateWorkerProfile />} />
+        <Route path="/create-job" element={<CreateJobPost />} />
+        <Route path="/jobs" element={<JobPosts />} />
+        <Route path="/job/:id" element={<JobDetail />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+      </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

@@ -1,0 +1,114 @@
+{
+  "name": "JobPost",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Job title"
+    },
+    "title_ar": {
+      "type": "string",
+      "description": "Job title in Arabic"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "electrician",
+        "plumber",
+        "painter",
+        "builder",
+        "cleaner",
+        "mechanic",
+        "carpenter",
+        "ac_repair",
+        "moving_help",
+        "home_repair",
+        "other"
+      ]
+    },
+    "city": {
+      "type": "string",
+      "enum": [
+        "Tripoli",
+        "Benghazi",
+        "Misrata",
+        "Sabha",
+        "Zawiya",
+        "Zliten",
+        "Ajdabiya",
+        "Sirte",
+        "Tobruk",
+        "Derna",
+        "Gharyan",
+        "Sabratha",
+        "Khoms",
+        "Tarhuna",
+        "Zintan",
+        "Other"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "description_ar": {
+      "type": "string"
+    },
+    "budget": {
+      "type": "number",
+      "description": "Budget in LYD"
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "urgency": {
+      "type": "string",
+      "enum": [
+        "normal",
+        "urgent"
+      ],
+      "default": "normal"
+    },
+    "contact_method": {
+      "type": "string",
+      "enum": [
+        "phone",
+        "whatsapp",
+        "in_app"
+      ],
+      "default": "phone"
+    },
+    "contact_info": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "in_progress",
+        "completed",
+        "cancelled"
+      ],
+      "default": "open"
+    },
+    "poster_email": {
+      "type": "string"
+    },
+    "poster_name": {
+      "type": "string"
+    },
+    "is_promoted": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "title",
+    "category",
+    "city",
+    "description",
+    "contact_info"
+  ]
+}
