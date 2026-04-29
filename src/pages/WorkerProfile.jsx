@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, MapPin, Phone, MessageCircle, Flag, Star, BadgeCheck, ExternalLink } from "lucide-react";
+import { ArrowLeft, MapPin, Phone, MessageCircle, Flag, Star, BadgeCheck, ExternalLink, Map } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import useLanguage from "../hooks/useLanguage";
 import CategoryIcon from "../components/common/CategoryIcon";
@@ -26,6 +26,7 @@ export default function WorkerProfile() {
   const [reportReason, setReportReason] = useState("fake_profile");
   const [reportDesc, setReportDesc] = useState("");
   const [user, setUser] = useState(null);
+  const [startingChat, setStartingChat] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -65,6 +66,31 @@ export default function WorkerProfile() {
     setNewComment("");
     toast.success(t.success);
     loadData();
+  };
+
+  const startChat = async () => {
+    if (!user || startingChat) return;
+    setStartingChat(true);
+    // Find or create conversation
+    const convos = await base44.entities.Conversation.list('-created_date', 200);
+    let convo = convos.find(c =>
+      c.worker_profile_id === id && c.participant_emails?.includes(user.email)
+    );
+    if (!convo) {
+      const workerUser = worker.user_email
+        ? [{ email: worker.user_email, name: lang === 'ar' && worker.full_name_ar ? worker.full_name_ar : worker.full_name }]
+        : [];
+      convo = await base44.entities.Conversation.create({
+        worker_profile_id: id,
+        worker_name: worker.full_name,
+        customer_email: user.email,
+        participant_emails: [user.email, worker.user_email || `worker_${id}`],
+        participant_names: [user.full_name || user.email, lang === 'ar' && worker.full_name_ar ? worker.full_name_ar : worker.full_name],
+        unread_by: [],
+      });
+    }
+    navigate(`/chat/${convo.id}`);
+    setStartingChat(false);
   };
 
   const submitReport = async () => {
@@ -167,7 +193,7 @@ export default function WorkerProfile() {
           )}
 
           {/* Contact Buttons */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {worker.phone && (
               <a href={`tel:${worker.phone}`} className="flex-1">
                 <Button variant="outline" className="w-full rounded-xl gap-2">
@@ -184,6 +210,10 @@ export default function WorkerProfile() {
                 </Button>
               </a>
             )}
+            <Button onClick={startChat} disabled={startingChat} variant="outline" className="w-full rounded-xl gap-2 mt-1">
+              <MessageCircle className="w-4 h-4" />
+              {startingChat ? t.loading : (t.message || 'In-app Message')}
+            </Button>
           </div>
         </div>
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ArrowLeft, SlidersHorizontal, X } from "lucide-react";
+import { ArrowLeft, SlidersHorizontal, Map } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import useLanguage from "../hooks/useLanguage";
@@ -63,12 +63,17 @@ export default function WorkerList() {
             </button>
             <h1 className="font-bold text-lg">{t.browse_workers}</h1>
           </div>
+          <div className="flex items-center gap-2">
+          <Link to="/map" className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-secondary">
+            <Map className="w-4 h-4" />
+          </Link>
           <button
             onClick={() => setShowFilters(!showFilters)}
             className={`w-8 h-8 flex items-center justify-center rounded-lg transition-colors ${showFilters ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'}`}
           >
             <SlidersHorizontal className="w-4 h-4" />
           </button>
+          </div>
         </div>
       </div>
 

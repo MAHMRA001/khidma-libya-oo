@@ -17,6 +17,9 @@ import JobDetail from './pages/JobDetail';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import AdminDashboard from './pages/AdminDashboard';
+import Messages from './pages/Messages';
+import Chat from './pages/Chat';
+import WorkerMap from './pages/WorkerMap';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -56,7 +59,10 @@ const AuthenticatedApp = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/messages" element={<Messages />} />
+        <Route path="/map" element={<WorkerMap />} />
       </Route>
+      <Route path="/chat/:id" element={<Chat />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

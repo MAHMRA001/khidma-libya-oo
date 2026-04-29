@@ -1,0 +1,45 @@
+{
+  "name": "Conversation",
+  "type": "object",
+  "properties": {
+    "participant_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Emails of both participants"
+    },
+    "participant_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "worker_profile_id": {
+      "type": "string"
+    },
+    "worker_name": {
+      "type": "string"
+    },
+    "customer_email": {
+      "type": "string"
+    },
+    "last_message": {
+      "type": "string"
+    },
+    "last_message_at": {
+      "type": "string"
+    },
+    "unread_by": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Emails of users who have unread messages"
+    }
+  },
+  "required": [
+    "participant_emails",
+    "worker_profile_id"
+  ]
+}

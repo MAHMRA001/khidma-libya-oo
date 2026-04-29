@@ -1,7 +1,7 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { Home, Briefcase, User, Settings, Shield } from "lucide-react";
-import useLanguage from "../../hooks/useLanguage";
 import { useState, useEffect } from "react";
+import { Home, Briefcase, User, Settings, Shield, MessageCircle } from "lucide-react";
+import useLanguage from "../../hooks/useLanguage";
 import { base44 } from "@/api/base44Client";
 
 export default function AppLayout() {
@@ -14,10 +14,24 @@ export default function AppLayout() {
   }, []);
 
   const isAdmin = user?.role === 'admin';
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    if (!user) return;
+    const checkUnread = async () => {
+      const convos = await base44.entities.Conversation.list('-last_message_at', 50);
+      const count = convos.filter(c => c.participant_emails?.includes(user.email) && c.unread_by?.includes(user.email)).length;
+      setUnreadCount(count);
+    };
+    checkUnread();
+    const unsub = base44.entities.Conversation.subscribe(() => checkUnread());
+    return unsub;
+  }, [user]);
 
   const navItems = [
     { path: "/", icon: Home, label: t.home },
     { path: "/jobs", icon: Briefcase, label: t.jobs },
+    { path: "/messages", icon: MessageCircle, label: t.message || 'Messages', badge: unreadCount },
     { path: "/profile", icon: User, label: t.profile },
     { path: "/settings", icon: Settings, label: t.settings },
   ];
@@ -48,7 +62,14 @@ export default function AppLayout() {
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                <item.icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5]' : ''}`} />
+                <div className="relative">
+                  <item.icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5]' : ''}`} />
+                  {item.badge > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-destructive text-destructive-foreground text-[9px] font-bold rounded-full flex items-center justify-center">
+                      {item.badge > 9 ? '9+' : item.badge}
+                    </span>
+                  )}
+                </div>
                 <span className="text-[10px] font-medium">{item.label}</span>
               </Link>
             );
