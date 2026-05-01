@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, ChevronRight, Plus, AlertCircle } from "lucide-react";
+import { Search, ChevronRight, Plus, AlertCircle, Store } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import useLanguage from "../hooks/useLanguage";
 import CategoryIcon from "../components/common/CategoryIcon";
@@ -184,6 +184,20 @@ export default function Home() {
             </div>
           </div>
         )}
+
+        {/* Businesses CTA */}
+        <Link to="/businesses" className="block mb-6">
+          <div className="flex items-center gap-3 p-4 rounded-2xl bg-primary/5 border border-primary/10 hover:bg-primary/10 transition-colors">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+              <Store className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-foreground">{t.browse_businesses}</p>
+              <p className="text-[10px] text-muted-foreground">{t.business_desc}</p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto" />
+          </div>
+        </Link>
       </div>
     </div>
   );

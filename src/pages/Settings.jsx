@@ -114,8 +114,8 @@ export default function Settings() {
         </div>
 
         <div className="mt-4 text-center">
-          <p className="text-xs text-muted-foreground">Khidma Libya v1.0</p>
-          <p className="text-xs text-muted-foreground font-arabic">خدمة ليبيا</p>
+          <p className="text-xs text-muted-foreground">Tranquillo v1.0</p>
+          <p className="text-xs text-muted-foreground font-arabic">خدمة</p>
         </div>
       </div>
     </div>

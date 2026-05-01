@@ -28,8 +28,8 @@ export default function Welcome() {
           <span className="text-4xl font-bold text-primary-foreground font-arabic">خ</span>
         </div>
 
-        <h1 className="text-3xl font-bold text-foreground mb-2">Khidma Libya</h1>
-        <p className="text-lg text-primary font-arabic mb-1">خدمة ليبيا</p>
+        <h1 className="text-3xl font-bold text-foreground mb-2">Tranquillo</h1>
+        <p className="text-lg text-primary font-arabic mb-1">خدمة</p>
         <p className="text-sm text-muted-foreground mb-10">
           {"Find trusted services & workers across Libya"}
         </p>

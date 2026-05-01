@@ -22,6 +22,9 @@ import AdminDashboard from './pages/AdminDashboard';
 import Messages from './pages/Messages';
 import Chat from './pages/Chat';
 import WorkerMap from './pages/WorkerMap';
+import Businesses from './pages/Businesses';
+import BusinessDetail from './pages/BusinessDetail';
+import CreateBusiness from './pages/CreateBusiness';
 
 
 
@@ -55,6 +58,9 @@ const AnimatedRoutes = () => {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/messages" element={null} />
             <Route path="/map" element={<WorkerMap />} />
+            <Route path="/businesses" element={<Businesses />} />
+            <Route path="/business/:id" element={<BusinessDetail />} />
+            <Route path="/create-business" element={<CreateBusiness />} />
           </Route>
           <Route path="/chat/:id" element={<Chat />} />
           <Route path="*" element={<PageNotFound />} />

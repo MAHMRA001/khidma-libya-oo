@@ -1,6 +1,6 @@
 const translations = {
   en: {
-    app_name: "Khidma Libya",
+    app_name: "Tranquillo",
     app_tagline: "Find trusted workers & services across Libya",
     welcome: "Welcome",
     choose_language: "Choose your language",
@@ -14,15 +14,15 @@ const translations = {
     profile: "Profile",
     settings: "Settings",
     admin: "Admin",
-    
-    // Account types
+
     customer: "Customer",
     worker: "Worker",
+    business: "Business",
     choose_account_type: "Choose Account Type",
     customer_desc: "Find workers and post jobs",
     worker_desc: "Offer your services and find work",
-    
-    // Categories
+    business_desc: "Register your shop or company",
+
     categories: "Categories",
     all_categories: "All Categories",
     electrician: "Electrician",
@@ -31,17 +31,21 @@ const translations = {
     builder: "Builder",
     cleaner: "Cleaner",
     mechanic: "Mechanic",
-    carpenter: "Carpenter",
+    barber: "Barber",
+    car_workshop: "Car Workshop",
+    cctv_installation: "CCTV / Security Cameras",
+    phone_repair: "Phone Repair",
+    appliance_repair: "Appliance Repair",
     ac_repair: "AC Repair",
     moving_help: "Moving Help",
     home_repair: "Home Repair",
+    car_towing: "Car Towing",
+    heavy_vehicle_rental: "Heavy Vehicle Rental",
     other: "Other Services",
-    
-    // Cities
+
     city: "City",
     all_cities: "All Cities",
-    
-    // Worker profile
+
     full_name: "Full Name",
     nationality: "Nationality",
     phone: "Phone Number",
@@ -63,8 +67,7 @@ const translations = {
     edit_profile: "Edit Profile",
     save: "Save",
     cancel: "Cancel",
-    
-    // Verification
+
     verified: "Verified",
     pending: "Pending Verification",
     rejected: "Rejected",
@@ -72,8 +75,7 @@ const translations = {
     verify: "Verify",
     reject: "Reject",
     rejection_reason: "Rejection Reason",
-    
-    // Job posts
+
     create_job: "Post a Job",
     job_title: "Job Title",
     description: "Description",
@@ -88,24 +90,21 @@ const translations = {
     completed: "Completed",
     cancelled: "Cancelled",
     post_job: "Post Job",
-    
-    // Reviews
+
     reviews: "Reviews",
     write_review: "Write a Review",
     rating: "Rating",
     comment: "Comment",
     submit_review: "Submit Review",
     no_reviews: "No reviews yet",
-    
-    // Filters
+
     filter: "Filter",
     sort_by: "Sort By",
     price_low_high: "Price: Low to High",
     price_high_low: "Price: High to Low",
     highest_rated: "Highest Rated",
     verified_only: "Verified Only",
-    
-    // Actions
+
     call: "Call",
     message: "Message",
     report: "Report",
@@ -115,8 +114,7 @@ const translations = {
     reset: "Reset",
     delete: "Delete",
     approve: "Approve",
-    
-    // Report
+
     report_user: "Report User",
     report_reason: "Reason",
     fake_profile: "Fake Profile",
@@ -125,8 +123,7 @@ const translations = {
     spam: "Spam",
     report_description: "Description",
     submit_report: "Submit Report",
-    
-    // Admin
+
     admin_dashboard: "Admin Dashboard",
     pending_verifications: "Pending Verifications",
     manage_users: "Manage Users",
@@ -136,8 +133,7 @@ const translations = {
     total_customers: "Total Customers",
     total_jobs: "Total Jobs",
     pending_reviews: "Pending Reviews",
-    
-    // Misc
+
     no_results: "No results found",
     loading: "Loading...",
     error: "Something went wrong",
@@ -157,10 +153,32 @@ const translations = {
     my_jobs: "My Jobs",
     browse_workers: "Browse Workers",
     browse_jobs: "Browse Jobs",
+    browse_businesses: "Browse Businesses",
     account_type: "Account Type",
+
+    // Business
+    business_name: "Business Name",
+    business_category: "Business Category",
+    address: "Address",
+    working_hours: "Working Hours",
+    working_days: "Working Days",
+    service_type: "Service Type",
+    walk_in: "Walk-in",
+    home_visit: "Home Visit",
+    both: "Both",
+    book_appointment: "Book Appointment",
+    my_appointments: "My Appointments",
+    appointments: "Appointments",
+    appointment_type: "Appointment Type",
+    preferred_date: "Preferred Date",
+    preferred_time: "Preferred Time",
+    book_now: "Book Now",
+    businesses: "Businesses",
+    create_business: "Register Business",
+    edit_business: "Edit Business",
   },
   ar: {
-    app_name: "خدمة ليبيا",
+    app_name: "خدمة",
     app_tagline: "ابحث عن عمال وخدمات موثوقة في جميع أنحاء ليبيا",
     welcome: "مرحباً",
     choose_language: "اختر لغتك",
@@ -174,13 +192,15 @@ const translations = {
     profile: "الملف الشخصي",
     settings: "الإعدادات",
     admin: "الإدارة",
-    
+
     customer: "عميل",
     worker: "عامل",
+    business: "شركة / متجر",
     choose_account_type: "اختر نوع الحساب",
     customer_desc: "ابحث عن عمال وانشر وظائف",
     worker_desc: "قدّم خدماتك وابحث عن عمل",
-    
+    business_desc: "سجّل متجرك أو شركتك",
+
     categories: "التصنيفات",
     all_categories: "جميع التصنيفات",
     electrician: "كهربائي",
@@ -189,15 +209,21 @@ const translations = {
     builder: "بنّاء",
     cleaner: "عامل نظافة",
     mechanic: "ميكانيكي",
-    carpenter: "نجّار",
+    barber: "حلاق",
+    car_workshop: "ورشة سيارات",
+    cctv_installation: "تركيب كاميرات مراقبة",
+    phone_repair: "إصلاح هواتف",
+    appliance_repair: "إصلاح أجهزة منزلية",
     ac_repair: "تصليح مكيفات",
     moving_help: "مساعدة نقل",
     home_repair: "صيانة منزلية",
+    car_towing: "سطحة سيارات",
+    heavy_vehicle_rental: "تأجير مركبات ثقيلة",
     other: "خدمات أخرى",
-    
+
     city: "المدينة",
     all_cities: "جميع المدن",
-    
+
     full_name: "الاسم الكامل",
     nationality: "الجنسية",
     phone: "رقم الهاتف",
@@ -219,7 +245,7 @@ const translations = {
     edit_profile: "تعديل الملف الشخصي",
     save: "حفظ",
     cancel: "إلغاء",
-    
+
     verified: "موثّق",
     pending: "قيد التحقق",
     rejected: "مرفوض",
@@ -227,7 +253,7 @@ const translations = {
     verify: "توثيق",
     reject: "رفض",
     rejection_reason: "سبب الرفض",
-    
+
     create_job: "نشر وظيفة",
     job_title: "عنوان الوظيفة",
     description: "الوصف",
@@ -242,21 +268,21 @@ const translations = {
     completed: "مكتمل",
     cancelled: "ملغي",
     post_job: "نشر الوظيفة",
-    
+
     reviews: "التقييمات",
     write_review: "اكتب تقييم",
     rating: "التقييم",
     comment: "تعليق",
     submit_review: "إرسال التقييم",
     no_reviews: "لا توجد تقييمات بعد",
-    
+
     filter: "تصفية",
     sort_by: "ترتيب حسب",
     price_low_high: "السعر: من الأقل للأعلى",
     price_high_low: "السعر: من الأعلى للأقل",
     highest_rated: "الأعلى تقييماً",
     verified_only: "الموثّقون فقط",
-    
+
     call: "اتصال",
     message: "رسالة",
     report: "إبلاغ",
@@ -266,7 +292,7 @@ const translations = {
     reset: "إعادة ضبط",
     delete: "حذف",
     approve: "موافقة",
-    
+
     report_user: "الإبلاغ عن مستخدم",
     report_reason: "السبب",
     fake_profile: "ملف شخصي مزيف",
@@ -275,7 +301,7 @@ const translations = {
     spam: "رسائل مزعجة",
     report_description: "الوصف",
     submit_report: "إرسال البلاغ",
-    
+
     admin_dashboard: "لوحة الإدارة",
     pending_verifications: "التحققات المعلقة",
     manage_users: "إدارة المستخدمين",
@@ -285,7 +311,7 @@ const translations = {
     total_customers: "إجمالي العملاء",
     total_jobs: "إجمالي الوظائف",
     pending_reviews: "التقييمات المعلقة",
-    
+
     no_results: "لا توجد نتائج",
     loading: "جارٍ التحميل...",
     error: "حدث خطأ ما",
@@ -305,7 +331,28 @@ const translations = {
     my_jobs: "وظائفي",
     browse_workers: "تصفح العمال",
     browse_jobs: "تصفح الوظائف",
+    browse_businesses: "تصفح الأعمال",
     account_type: "نوع الحساب",
+
+    business_name: "اسم المنشأة",
+    business_category: "تصنيف المنشأة",
+    address: "العنوان",
+    working_hours: "ساعات العمل",
+    working_days: "أيام العمل",
+    service_type: "نوع الخدمة",
+    walk_in: "حضور شخصي",
+    home_visit: "زيارة منزلية",
+    both: "كلاهما",
+    book_appointment: "احجز موعد",
+    my_appointments: "مواعيدي",
+    appointments: "المواعيد",
+    appointment_type: "نوع الموعد",
+    preferred_date: "التاريخ المفضل",
+    preferred_time: "الوقت المفضل",
+    book_now: "احجز الآن",
+    businesses: "الأعمال",
+    create_business: "تسجيل منشأة",
+    edit_business: "تعديل المنشأة",
   }
 };
 
@@ -318,14 +365,14 @@ export function isRTL(lang) {
 }
 
 export const CITIES = [
-  "Tripoli", "Benghazi", "Misrata", "Sabha", "Zawiya", 
+  "Tripoli", "Benghazi", "Misrata", "Sabha", "Zawiya",
   "Zliten", "Ajdabiya", "Sirte", "Tobruk", "Derna",
   "Gharyan", "Sabratha", "Khoms", "Tarhuna", "Zintan", "Other"
 ];
 
 export const CITIES_AR = {
   "Tripoli": "طرابلس",
-  "Benghazi": "بنغازي", 
+  "Benghazi": "بنغازي",
   "Misrata": "مصراتة",
   "Sabha": "سبها",
   "Zawiya": "الزاوية",
@@ -344,7 +391,9 @@ export const CITIES_AR = {
 
 export const CATEGORIES = [
   "electrician", "plumber", "painter", "builder", "cleaner",
-  "mechanic", "carpenter", "ac_repair", "moving_help", "home_repair", "other"
+  "mechanic", "barber", "car_workshop", "cctv_installation",
+  "phone_repair", "appliance_repair", "ac_repair",
+  "moving_help", "home_repair", "car_towing", "heavy_vehicle_rental", "other"
 ];
 
 export const CATEGORY_ICONS = {
@@ -354,10 +403,16 @@ export const CATEGORY_ICONS = {
   builder: "HardHat",
   cleaner: "Sparkles",
   mechanic: "Wrench",
-  carpenter: "Hammer",
+  barber: "Scissors",
+  car_workshop: "Car",
+  cctv_installation: "Camera",
+  phone_repair: "Smartphone",
+  appliance_repair: "WashingMachine",
   ac_repair: "Wind",
   moving_help: "Truck",
   home_repair: "Home",
+  car_towing: "TruckIcon",
+  heavy_vehicle_rental: "Container",
   other: "MoreHorizontal"
 };
 

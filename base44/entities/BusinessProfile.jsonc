@@ -1,11 +1,14 @@
 {
-  "name": "JobPost",
+  "name": "BusinessProfile",
   "type": "object",
   "properties": {
-    "title": {
+    "owner_email": {
       "type": "string"
     },
-    "title_ar": {
+    "business_name": {
+      "type": "string"
+    },
+    "business_name_ar": {
       "type": "string"
     },
     "category": {
@@ -57,8 +60,17 @@
     "description_ar": {
       "type": "string"
     },
-    "budget": {
-      "type": "number"
+    "phone": {
+      "type": "string"
+    },
+    "whatsapp": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "logo": {
+      "type": "string"
     },
     "photos": {
       "type": "array",
@@ -66,52 +78,48 @@
         "type": "string"
       }
     },
-    "urgency": {
+    "service_type": {
       "type": "string",
       "enum": [
-        "normal",
-        "urgent"
+        "walk_in",
+        "home_visit",
+        "both"
       ],
-      "default": "normal"
+      "default": "both"
     },
-    "contact_method": {
+    "working_hours": {
+      "type": "string",
+      "description": "e.g. 8am - 6pm"
+    },
+    "working_days": {
+      "type": "string",
+      "description": "e.g. Sat-Thu"
+    },
+    "verification_status": {
       "type": "string",
       "enum": [
-        "phone",
-        "whatsapp",
-        "in_app"
+        "pending",
+        "verified",
+        "rejected"
       ],
-      "default": "phone"
+      "default": "pending"
     },
-    "contact_info": {
+    "rejection_reason": {
       "type": "string"
     },
-    "status": {
-      "type": "string",
-      "enum": [
-        "open",
-        "in_progress",
-        "completed",
-        "cancelled"
-      ],
-      "default": "open"
+    "avg_rating": {
+      "type": "number",
+      "default": 0
     },
-    "poster_email": {
-      "type": "string"
-    },
-    "poster_name": {
-      "type": "string"
-    },
-    "is_promoted": {
-      "type": "boolean",
-      "default": false
+    "review_count": {
+      "type": "number",
+      "default": 0
     }
   },
   "required": [
-    "title",
+    "business_name",
     "category",
     "city",
-    "description",
-    "contact_info"
+    "phone"
   ]
 }

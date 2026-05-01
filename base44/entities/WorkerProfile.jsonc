@@ -7,12 +7,10 @@
       "description": "Email of the worker user"
     },
     "full_name": {
-      "type": "string",
-      "description": "Worker's full name"
+      "type": "string"
     },
     "full_name_ar": {
-      "type": "string",
-      "description": "Worker's full name in Arabic"
+      "type": "string"
     },
     "city": {
       "type": "string",
@@ -33,12 +31,10 @@
         "Tarhuna",
         "Zintan",
         "Other"
-      ],
-      "description": "City in Libya"
+      ]
     },
     "nationality": {
-      "type": "string",
-      "description": "Worker nationality"
+      "type": "string"
     },
     "category": {
       "type": "string",
@@ -49,56 +45,51 @@
         "builder",
         "cleaner",
         "mechanic",
-        "carpenter",
+        "barber",
+        "car_workshop",
+        "cctv_installation",
+        "phone_repair",
+        "appliance_repair",
         "ac_repair",
         "moving_help",
         "home_repair",
+        "car_towing",
+        "heavy_vehicle_rental",
         "other"
-      ],
-      "description": "Service category"
+      ]
     },
     "description": {
-      "type": "string",
-      "description": "Service description in English"
+      "type": "string"
     },
     "description_ar": {
-      "type": "string",
-      "description": "Service description in Arabic"
+      "type": "string"
     },
     "profile_photo": {
-      "type": "string",
-      "description": "Profile photo URL"
+      "type": "string"
     },
     "work_photos": {
       "type": "array",
       "items": {
         "type": "string"
-      },
-      "description": "Photos of previous work"
+      }
     },
     "id_document": {
-      "type": "string",
-      "description": "Passport or national ID photo URL"
+      "type": "string"
     },
     "selfie_photo": {
-      "type": "string",
-      "description": "Selfie for verification"
+      "type": "string"
     },
     "price_min": {
-      "type": "number",
-      "description": "Minimum price (LYD)"
+      "type": "number"
     },
     "price_max": {
-      "type": "number",
-      "description": "Maximum price (LYD)"
+      "type": "number"
     },
     "phone": {
-      "type": "string",
-      "description": "Phone number"
+      "type": "string"
     },
     "whatsapp": {
-      "type": "string",
-      "description": "WhatsApp number"
+      "type": "string"
     },
     "availability": {
       "type": "string",
@@ -119,8 +110,7 @@
       "default": "pending"
     },
     "rejection_reason": {
-      "type": "string",
-      "description": "Reason for rejection"
+      "type": "string"
     },
     "is_featured": {
       "type": "boolean",
