@@ -43,36 +43,48 @@ export default function CreateWorkerProfile() {
   const handleFileUpload = async (e, field) => {
     const file = e.target.files[0];
     if (!file) return;
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    setForm(prev => ({ ...prev, [field]: file_url }));
-    toast.success(t.success);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setForm(prev => ({ ...prev, [field]: file_url }));
+      toast.success(t.success);
+    } catch (err) {
+      console.error('Upload failed:', err);
+      toast.error('Image upload failed, you can continue without it.');
+    }
   };
 
   const handleSubmit = async () => {
-    if (!form.full_name || !form.city || !form.category || !form.phone) {
-      toast.error("Please fill required fields");
+    if (!form.category || !form.phone || !form.description) {
+      toast.error('Please fill in Category, Phone, and Description.');
       return;
     }
     setLoading(true);
-    const user = await base44.auth.me();
-    const data = {
-      ...form,
-      price_min: form.price_min ? Number(form.price_min) : undefined,
-      price_max: form.price_max ? Number(form.price_max) : undefined,
-      user_email: user.email,
-      verification_status: 'pending',
-    };
+    try {
+      const user = await base44.auth.me();
+      const data = {
+        ...form,
+        full_name: form.full_name || user.full_name || '',
+        price_min: form.price_min ? Number(form.price_min) : undefined,
+        price_max: form.price_max ? Number(form.price_max) : undefined,
+        user_email: user.email,
+        verification_status: 'pending',
+      };
 
-    if (existingProfile) {
-      await base44.entities.WorkerProfile.update(existingProfile.id, data);
-    } else {
-      await base44.entities.WorkerProfile.create(data);
+      if (existingProfile) {
+        await base44.entities.WorkerProfile.update(existingProfile.id, data);
+      } else {
+        await base44.entities.WorkerProfile.create(data);
+      }
+
+      await base44.auth.updateMe({ account_type: 'worker' });
+      toast.success(t.success);
+      navigate('/');
+    } catch (err) {
+      console.error('Profile submission failed:', err);
+      toast.error('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
     }
-
-    await base44.auth.updateMe({ account_type: 'worker' });
-    toast.success(t.success);
-    navigate('/profile');
-    setLoading(false);
   };
 
   const FileUploadBox = ({ label, field, value }) => (
