@@ -22,6 +22,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import Messages from './pages/Messages';
 import Chat from './pages/Chat';
 import WorkerMap from './pages/WorkerMap';
+import Onboarding from './pages/Onboarding';
 import Businesses from './pages/Businesses';
 import BusinessDetail from './pages/BusinessDetail';
 import CreateBusiness from './pages/CreateBusiness';
@@ -45,6 +46,7 @@ const AnimatedRoutes = () => {
       >
         <Routes location={location}>
           <Route path="/welcome" element={<Welcome />} />
+          <Route path="/onboarding" element={<Onboarding />} />
           <Route element={<AppLayout />}>
             <Route path="/" element={null} />
             <Route path="/workers" element={<WorkerList />} />
@@ -71,7 +73,7 @@ const AnimatedRoutes = () => {
 };
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin, user } = useAuth();
 
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
@@ -79,6 +81,15 @@ const AuthenticatedApp = () => {
         <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
       </div>
     );
+  }
+
+  // New user with no role yet → onboarding
+  if (!isLoadingAuth && !isLoadingPublicSettings && !authError && user && !user.account_type) {
+    // Only redirect if not already on onboarding/welcome
+    if (!window.location.pathname.startsWith('/onboarding') && !window.location.pathname.startsWith('/welcome')) {
+      window.location.replace('/onboarding');
+      return null;
+    }
   }
 
   if (authError) {

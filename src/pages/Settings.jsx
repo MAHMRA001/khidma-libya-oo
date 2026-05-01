@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Globe, Info, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
@@ -15,10 +15,22 @@ export default function Settings() {
   const navigate = useNavigate();
   const [, setForceRender] = useState(0);
   const [deleting, setDeleting] = useState(false);
+  const [user, setUser] = useState(null);
+  const [savingRole, setSavingRole] = useState(false);
+
+  useEffect(() => {
+    base44.auth.me().then(setUser).catch(() => {});
+  }, []);
+
+  const handleRoleChange = async (newRole) => {
+    setSavingRole(true);
+    await base44.auth.updateMe({ account_type: newRole });
+    setUser(prev => ({ ...prev, account_type: newRole }));
+    setSavingRole(false);
+  };
 
   const handleDeleteAccount = async () => {
     setDeleting(true);
-    // Clear user data then logout
     await base44.auth.updateMe({ account_type: null, deleted: true }).catch(() => {});
     base44.auth.logout('/welcome');
   };
@@ -69,6 +81,34 @@ export default function Settings() {
             </button>
           </div>
         </div>
+
+        {/* Account Role */}
+        {user && (
+          <div className="mb-6">
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+              {t.account_type}
+            </h2>
+            <div className="space-y-2">
+              {[
+                { value: 'customer', label: lang === 'ar' ? 'عميل — أحتاج خدمة' : 'Customer — I need a service' },
+                { value: 'worker', label: lang === 'ar' ? 'عامل — أقدّم خدمة' : 'Worker — I offer services' },
+                { value: 'both', label: lang === 'ar' ? 'كلاهما' : 'Both' },
+              ].map(role => (
+                <button
+                  key={role.value}
+                  onClick={() => handleRoleChange(role.value)}
+                  disabled={savingRole}
+                  className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${
+                    user.account_type === role.value ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/30'
+                  }`}
+                >
+                  <span className="text-sm font-medium flex-1 text-left">{role.label}</span>
+                  {user.account_type === role.value && <span className="w-2 h-2 rounded-full bg-primary" />}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Terms */}
         <div className="p-4 rounded-xl bg-card border border-border">
