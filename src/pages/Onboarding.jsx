@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { Briefcase, Wrench, Users } from "lucide-react";
 import { base44 } from "@/api/base44Client";
@@ -48,11 +49,16 @@ export default function Onboarding() {
   const handleContinue = async () => {
     if (!selected) return;
     setSaving(true);
-    await base44.auth.updateMe({ account_type: selected });
-    if (selected === "worker") {
-      navigate("/create-worker-profile");
-    } else {
-      navigate("/");
+    try {
+      await base44.auth.updateMe({ account_type: selected });
+      if (selected === "worker") {
+        navigate("/create-worker-profile");
+      } else {
+        navigate("/");
+      }
+    } catch (err) {
+      toast.error(lang === "ar" ? "حدث خطأ، حاول مجدداً" : "Something went wrong. Please try again.");
+      setSaving(false);
     }
   };
 
