@@ -41,6 +41,9 @@ const translations = {
     home_repair: "Home Repair",
     car_towing: "Car Towing",
     heavy_vehicle_rental: "Heavy Vehicle Rental",
+    housekeeping: "Housekeeping",
+    language_courses: "Language Courses",
+    tutoring: "Tutoring / School Help",
     other: "Other Services",
 
     city: "City",
@@ -219,6 +222,9 @@ const translations = {
     home_repair: "صيانة منزلية",
     car_towing: "سطحة سيارات",
     heavy_vehicle_rental: "تأجير مركبات ثقيلة",
+    housekeeping: "خدمات المنزل",
+    language_courses: "دروس اللغات",
+    tutoring: "مساعدة مدرسية",
     other: "خدمات أخرى",
 
     city: "المدينة",
@@ -393,7 +399,8 @@ export const CATEGORIES = [
   "electrician", "plumber", "painter", "builder", "cleaner",
   "mechanic", "barber", "car_workshop", "cctv_installation",
   "phone_repair", "appliance_repair", "ac_repair",
-  "moving_help", "home_repair", "car_towing", "heavy_vehicle_rental", "other"
+  "moving_help", "home_repair", "car_towing", "heavy_vehicle_rental",
+  "housekeeping", "language_courses", "tutoring", "other"
 ];
 
 export const CATEGORY_ICONS = {
@@ -413,6 +420,9 @@ export const CATEGORY_ICONS = {
   home_repair: "Home",
   car_towing: "TruckIcon",
   heavy_vehicle_rental: "Container",
+  housekeeping: "BedDouble",
+  language_courses: "BookOpen",
+  tutoring: "GraduationCap",
   other: "MoreHorizontal"
 };
 

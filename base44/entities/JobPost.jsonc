@@ -27,6 +27,9 @@
         "home_repair",
         "car_towing",
         "heavy_vehicle_rental",
+        "housekeeping",
+        "language_courses",
+        "tutoring",
         "other"
       ]
     },

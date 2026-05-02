@@ -1,4 +1,4 @@
-import { Zap, Droplets, Paintbrush, HardHat, Sparkles, Wrench, Wind, Truck, Home, MoreHorizontal, Scissors, Car, Camera, Smartphone, Waves } from "lucide-react";
+import { Zap, Droplets, Paintbrush, HardHat, Sparkles, Wrench, Wind, Truck, Home, MoreHorizontal, Scissors, Car, Camera, Smartphone, Waves, BedDouble, BookOpen, GraduationCap } from "lucide-react";
 
 const iconMap = {
   electrician: Zap,
@@ -17,6 +17,9 @@ const iconMap = {
   home_repair: Home,
   car_towing: Truck,
   heavy_vehicle_rental: Truck,
+  housekeeping: BedDouble,
+  language_courses: BookOpen,
+  tutoring: GraduationCap,
   other: MoreHorizontal,
 };
 
@@ -37,6 +40,9 @@ const colorMap = {
   home_repair: "bg-rose-100 text-rose-700",
   car_towing: "bg-amber-100 text-amber-700",
   heavy_vehicle_rental: "bg-lime-100 text-lime-700",
+  housekeeping: "bg-orange-100 text-orange-700",
+  language_courses: "bg-violet-100 text-violet-700",
+  tutoring: "bg-blue-100 text-blue-700",
   other: "bg-gray-100 text-gray-700",
 };
 
