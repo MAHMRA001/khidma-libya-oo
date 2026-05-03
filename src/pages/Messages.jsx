@@ -54,7 +54,7 @@ export default function Messages() {
         ) : conversations.length === 0 ? (
           <div className="text-center py-20">
             <MessageCircle className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
-            <p className="text-muted-foreground text-sm">{t.no_results}</p>
+            <p className="text-muted-foreground text-sm">{t.no_messages_yet || "You don't have messages yet."}</p>
           </div>
         ) : (
           <div className="space-y-2">

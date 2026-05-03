@@ -157,6 +157,7 @@ const translations = {
     browse_workers: "Browse Workers",
     browse_jobs: "Browse Jobs",
     browse_businesses: "Browse Businesses",
+    no_messages_yet: "You don't have messages yet.",
     account_type: "Account Type",
 
     // Business
@@ -338,6 +339,7 @@ const translations = {
     browse_workers: "تصفح العمال",
     browse_jobs: "تصفح الوظائف",
     browse_businesses: "تصفح الأعمال",
+    no_messages_yet: "لا توجد لديك رسائل بعد.",
     account_type: "نوع الحساب",
 
     business_name: "اسم المنشأة",
