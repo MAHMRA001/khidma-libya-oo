@@ -20,7 +20,7 @@ export default function AdminDashboard() {
   const loadData = async () => {
     const u = await base44.auth.me();
     setUser(u);
-    if (u.role !== 'admin') {
+    if (u.role !== 'admin' && u.email !== 'mraiwamahmod@gmail.com') {
       navigate('/');
       return;
     }

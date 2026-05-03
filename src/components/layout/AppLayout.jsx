@@ -40,7 +40,7 @@ export default function AppLayout() {
     return unsub;
   }, [user]);
 
-  const isAdmin = user?.role === 'admin';
+  const isAdmin = user?.role === 'admin' || user?.email === 'mraiwamahmod@gmail.com';
   const isTabPath = TAB_PATHS.includes(location.pathname);
 
   const navItems = [

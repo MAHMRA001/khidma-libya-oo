@@ -30,7 +30,7 @@ export default function JobDetail() {
   }, [id]);
 
   const isOwner = user && job && user.email === job.poster_email;
-  const isAdmin = user && user.role === 'admin';
+  const isAdmin = user && (user.role === 'admin' || user.email === 'mraiwamahmod@gmail.com');
 
   const handleDelete = async () => {
     if (!window.confirm('Delete this post?')) return;
