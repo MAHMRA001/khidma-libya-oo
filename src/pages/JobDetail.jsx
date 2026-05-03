@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, MapPin, Clock, Phone, MessageCircle, AlertTriangle, Flag } from "lucide-react";
+import { ArrowLeft, MapPin, Clock, Phone, MessageCircle, AlertTriangle, Flag, Trash2, Pencil, X, ZoomIn } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import useLanguage from "../hooks/useLanguage";
 import CategoryIcon from "../components/common/CategoryIcon";
@@ -20,13 +20,33 @@ export default function JobDetail() {
   const [reportOpen, setReportOpen] = useState(false);
   const [reportReason, setReportReason] = useState("fake_profile");
   const [reportDesc, setReportDesc] = useState("");
+  const [user, setUser] = useState(null);
+  const [lightboxPhoto, setLightboxPhoto] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     base44.entities.JobPost.get(id).then(j => { setJob(j); setLoading(false); });
+    base44.auth.me().then(setUser).catch(() => {});
   }, [id]);
 
+  const isOwner = user && job && user.email === job.poster_email;
+  const isAdmin = user && user.role === 'admin';
+
+  const handleDelete = async () => {
+    if (!window.confirm('Delete this post?')) return;
+    setDeleting(true);
+    await base44.entities.JobPost.delete(id);
+    toast.success(t.success);
+    navigate('/jobs');
+  };
+
+  const handleDeletePhoto = async (photoUrl) => {
+    const updated = job.photos.filter(p => p !== photoUrl);
+    await base44.entities.JobPost.update(id, { photos: updated });
+    setJob(prev => ({ ...prev, photos: updated }));
+  };
+
   const submitReport = async () => {
-    const user = await base44.auth.me();
     await base44.entities.Report.create({
       reported_type: 'job_post',
       reported_id: id,
@@ -58,6 +78,18 @@ export default function JobDetail() {
             <ArrowLeft className="w-5 h-5" />
           </button>
           <h1 className="font-bold text-lg truncate">{lang === 'ar' && job.title_ar ? job.title_ar : job.title}</h1>
+          <div className="flex items-center gap-2 ml-auto">
+            {isOwner && (
+              <button onClick={() => navigate(`/create-job?edit=${job.id}`)} className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-secondary">
+                <Pencil className="w-4 h-4" />
+              </button>
+            )}
+            {(isOwner || isAdmin) && (
+              <button onClick={handleDelete} disabled={deleting} className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-destructive/10 text-destructive">
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -95,8 +127,38 @@ export default function JobDetail() {
           {job.photos?.length > 0 && (
             <div className="grid grid-cols-3 gap-2 mb-4">
               {job.photos.map((p, i) => (
-                <img key={i} src={p} alt="" className="w-full aspect-square rounded-xl object-cover" />
+                <div key={i} className="relative group">
+                  <img
+                    src={p}
+                    alt=""
+                    className="w-full aspect-square rounded-xl object-cover cursor-pointer"
+                    onClick={() => setLightboxPhoto(p)}
+                  />
+                  {isAdmin && (
+                    <button
+                      onClick={() => handleDeletePhoto(p)}
+                      className="absolute top-1 right-1 w-6 h-6 rounded-full bg-destructive text-white items-center justify-center hidden group-hover:flex"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                  <div className="absolute inset-0 rounded-xl bg-black/0 group-hover:bg-black/10 flex items-center justify-center transition-all pointer-events-none">
+                    <ZoomIn className="w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-all" />
+                  </div>
+                </div>
               ))}
+            </div>
+          )}
+
+          {lightboxPhoto && (
+            <div
+              className="fixed inset-0 z-[200] bg-black/90 flex items-center justify-center p-4"
+              onClick={() => setLightboxPhoto(null)}
+            >
+              <button className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                <X className="w-5 h-5 text-white" />
+              </button>
+              <img src={lightboxPhoto} alt="" className="max-w-full max-h-full rounded-xl object-contain" onClick={e => e.stopPropagation()} />
             </div>
           )}
 

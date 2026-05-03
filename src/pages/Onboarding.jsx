@@ -1,4 +1,6 @@
 import { useState } from "react";
+import NativePicker from "../components/common/NativePicker";
+import { CITIES, CITIES_AR } from "../lib/i18n";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { Briefcase, Wrench, Users } from "lucide-react";
@@ -44,13 +46,14 @@ export default function Onboarding() {
   const { lang, rtl } = useLanguage();
   const navigate = useNavigate();
   const [selected, setSelected] = useState(null);
+  const [city, setCity] = useState('');
   const [saving, setSaving] = useState(false);
 
   const handleContinue = async () => {
     if (!selected) return;
     setSaving(true);
     try {
-      await base44.auth.updateMe({ account_type: selected });
+      await base44.auth.updateMe({ account_type: selected, city });
       if (selected === "worker") {
         navigate("/create-worker-profile");
       } else {
@@ -113,12 +116,25 @@ export default function Onboarding() {
           })}
         </div>
 
+        <div className="mb-6">
+          <p className="text-sm font-medium text-foreground mb-2">
+            {lang === 'ar' ? 'مدينتك' : 'Your City'}
+          </p>
+          <NativePicker
+            value={city}
+            onValueChange={setCity}
+            placeholder={lang === 'ar' ? 'اختر مدينتك' : 'Select your city'}
+            options={CITIES.map(c => ({ value: c, label: lang === 'ar' ? CITIES_AR[c] : c }))}
+            className="rounded-xl"
+          />
+        </div>
+
         <Button
           onClick={handleContinue}
           disabled={!selected || saving}
           className="w-full h-12 rounded-2xl text-base font-semibold"
         >
-          {saving ? (lang === "ar" ? "جارٍ الحفظ..." : "Saving...") : (lang === "ar" ? "متابعة" : "Continue")}
+          {saving ? (lang === 'ar' ? 'جارٍ الحفظ...' : 'Saving...') : (lang === 'ar' ? 'متابعة' : 'Continue')}
         </Button>
       </motion.div>
     </div>

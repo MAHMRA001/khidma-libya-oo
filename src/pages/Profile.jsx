@@ -98,16 +98,20 @@ export default function Profile() {
         )}
 
         {/* My Jobs */}
-        {myJobs.length > 0 && (
-          <div className="mb-6">
-            <h2 className="font-bold mb-3">{t.my_jobs}</h2>
+        <div className="mb-6">
+          <h2 className="font-bold mb-3">{t.my_jobs}</h2>
+          {myJobs.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-4">
+              {rtl ? 'ليس لديك أي منشورات بعد.' : "You don't have any posts yet."}
+            </p>
+          ) : (
             <div className="space-y-3">
               {myJobs.map(job => (
                 <JobCard key={job.id} job={job} />
               ))}
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Quick Links */}
         <div className="space-y-2 mb-6">
