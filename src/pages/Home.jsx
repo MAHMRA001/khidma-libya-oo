@@ -54,7 +54,7 @@ export default function Home() {
         )}
       </AnimatePresence>
       {/* Header */}
-      <div className="bg-primary text-primary-foreground px-5 pt-12 pb-8 rounded-b-[2rem]">
+      <div className="bg-gradient-to-br from-primary via-primary to-emerald-700 text-primary-foreground px-5 pt-12 pb-8 rounded-b-[2.5rem] shadow-lg">
         <div className="max-w-lg mx-auto">
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -79,7 +79,7 @@ export default function Home() {
                   navigate(`/workers?search=${encodeURIComponent(searchQuery)}`);
                 }
               }}
-              className="w-full h-12 pl-11 pr-4 rounded-2xl bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-white/30"
+              className="w-full h-12 pl-11 pr-4 rounded-2xl bg-white/95 text-foreground placeholder:text-muted-foreground text-sm focus:outline-none shadow-md"
             />
           </div>
         </div>
@@ -105,15 +105,17 @@ export default function Home() {
               <ChevronRight className="w-3.5 h-3.5" />
             </Link>
           </div>
-          <div className="grid grid-cols-4 gap-3">
-            {CATEGORIES.slice(0, 8).map((cat) => (
+          <div className="flex gap-3 overflow-x-auto pb-2 -mx-5 px-5 scrollbar-hide" style={{scrollbarWidth:'none'}}>
+            {CATEGORIES.slice(0, 12).map((cat) => (
               <Link
                 key={cat}
                 to={`/workers?category=${cat}`}
-                className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-secondary transition-colors"
+                className="flex flex-col items-center gap-1.5 flex-shrink-0"
               >
-                <CategoryIcon category={cat} size="w-12 h-12" iconSize="w-6 h-6" />
-                <span className="text-[10px] font-medium text-foreground text-center leading-tight">
+                <div className="w-14 h-14 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                  <CategoryIcon category={cat} size="w-14 h-14" iconSize="w-7 h-7" />
+                </div>
+                <span className="text-[10px] font-medium text-foreground text-center leading-tight w-14">
                   {t[cat]}
                 </span>
               </Link>
@@ -125,26 +127,26 @@ export default function Home() {
         <div className="grid grid-cols-2 gap-3 mb-6">
           <Link
             to="/create-job"
-            className="flex items-center gap-3 p-4 rounded-2xl bg-primary/5 border border-primary/10 hover:bg-primary/10 transition-colors"
+            className="relative overflow-hidden flex flex-col gap-2 p-4 rounded-2xl bg-gradient-to-br from-primary to-emerald-700 text-primary-foreground shadow-md hover:shadow-lg transition-all active:scale-95"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-              <Plus className="w-5 h-5 text-primary" />
+            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+              <Plus className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-foreground">{t.create_job}</p>
-              <p className="text-[10px] text-muted-foreground">{t.customer_desc}</p>
+              <p className="text-sm font-bold">{t.create_job}</p>
+              <p className="text-[10px] text-primary-foreground/70">{t.customer_desc}</p>
             </div>
           </Link>
           <Link
             to="/create-worker-profile"
-            className="flex items-center gap-3 p-4 rounded-2xl bg-accent/5 border border-accent/10 hover:bg-accent/10 transition-colors"
+            className="relative overflow-hidden flex flex-col gap-2 p-4 rounded-2xl bg-gradient-to-br from-accent to-red-600 text-white shadow-md hover:shadow-lg transition-all active:scale-95"
           >
-            <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
-              <Plus className="w-5 h-5 text-accent" />
+            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+              <Plus className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-foreground">{t.create_profile}</p>
-              <p className="text-[10px] text-muted-foreground">{t.worker_desc}</p>
+              <p className="text-sm font-bold">{t.create_profile}</p>
+              <p className="text-[10px] text-white/70">{t.worker_desc}</p>
             </div>
           </Link>
         </div>

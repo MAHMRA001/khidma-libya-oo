@@ -83,11 +83,11 @@ const AuthenticatedApp = () => {
     );
   }
 
-  // New user with no role yet → onboarding
+  // New user with no profile yet → force create profile
   if (!isLoadingAuth && !isLoadingPublicSettings && !authError && user && !user.account_type) {
-    // Only redirect if not already on onboarding/welcome
-    if (!window.location.pathname.startsWith('/onboarding') && !window.location.pathname.startsWith('/welcome')) {
-      window.location.replace('/onboarding');
+    const blocked = ['/create-worker-profile', '/onboarding', '/welcome'];
+    if (!blocked.some(p => window.location.pathname.startsWith(p))) {
+      window.location.replace('/create-worker-profile');
       return null;
     }
   }

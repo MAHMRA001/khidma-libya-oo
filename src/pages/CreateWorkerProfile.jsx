@@ -106,12 +106,21 @@ export default function CreateWorkerProfile() {
 
   return (
     <div className={`min-h-screen ${rtl ? 'font-arabic' : 'font-sans'}`}>
-      <div className="sticky top-0 z-40 bg-card border-b border-border px-5 py-3">
-        <div className="max-w-lg mx-auto flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-secondary">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <h1 className="font-bold text-lg">{existingProfile ? t.edit_profile : t.create_profile}</h1>
+      {/* Logo Header */}
+      <div className="bg-gradient-to-br from-primary via-primary to-emerald-700 text-primary-foreground px-5 pt-12 pb-8 rounded-b-[2.5rem] shadow-lg">
+        <div className="max-w-lg mx-auto">
+          {existingProfile && (
+            <button onClick={() => navigate(-1)} className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 mb-4">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+          )}
+          <div className="flex flex-col items-center text-center py-2">
+            <div className="w-20 h-20 rounded-3xl bg-white/20 backdrop-blur flex items-center justify-center shadow-xl mb-4 border-2 border-white/30">
+              <span className="text-4xl font-bold font-arabic">خ</span>
+            </div>
+            <h1 className="text-2xl font-bold mb-1">{existingProfile ? t.edit_profile : t.create_profile}</h1>
+            <p className="text-primary-foreground/70 text-sm">{t.app_tagline}</p>
+          </div>
         </div>
       </div>
 
