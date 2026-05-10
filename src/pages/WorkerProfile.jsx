@@ -27,6 +27,7 @@ export default function WorkerProfile() {
   const [reportDesc, setReportDesc] = useState("");
   const [user, setUser] = useState(null);
   const [startingChat, setStartingChat] = useState(false);
+  const [lightboxPhoto, setLightboxPhoto] = useState(null);
 
   useEffect(() => {
     loadData();
@@ -217,13 +218,32 @@ export default function WorkerProfile() {
           </div>
         </div>
 
+        {/* Lightbox */}
+        {lightboxPhoto && (
+          <div
+            className="fixed inset-0 z-[200] bg-black/90 flex items-center justify-center p-4"
+            onClick={() => setLightboxPhoto(null)}
+          >
+            <button className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+              <span className="text-white text-xl">&times;</span>
+            </button>
+            <img src={lightboxPhoto} alt="" className="max-w-full max-h-full rounded-xl object-contain" onClick={e => e.stopPropagation()} />
+          </div>
+        )}
+
         {/* Work Photos */}
         {worker.work_photos?.length > 0 && (
           <div className="mb-4">
             <h2 className="font-bold mb-3">{t.work_photos}</h2>
             <div className="grid grid-cols-3 gap-2">
               {worker.work_photos.map((photo, i) => (
-                <img key={i} src={photo} alt="" className="w-full aspect-square rounded-xl object-cover" />
+                <img
+                  key={i}
+                  src={photo}
+                  alt=""
+                  className="w-full aspect-square rounded-xl object-cover cursor-pointer active:opacity-80"
+                  onClick={() => setLightboxPhoto(photo)}
+                />
               ))}
             </div>
           </div>
