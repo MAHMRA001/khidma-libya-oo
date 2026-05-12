@@ -54,20 +54,25 @@ export default function Home() {
         )}
       </AnimatePresence>
       {/* Header */}
-      <div className="bg-gradient-to-br from-primary via-primary to-emerald-700 text-primary-foreground px-5 pt-12 pb-8 rounded-b-[2.5rem] shadow-lg">
-        <div className="max-w-lg mx-auto">
-          <div className="flex items-center justify-between mb-6">
+      <div className="relative overflow-hidden bg-gradient-to-br from-primary via-emerald-700 to-teal-800 text-primary-foreground px-5 pt-12 pb-10 rounded-b-[2.5rem] shadow-xl">
+        {/* decorative circles */}
+        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/5" />
+        <div className="absolute top-16 -right-6 w-28 h-28 rounded-full bg-white/5" />
+        <div className="absolute -bottom-6 -left-6 w-36 h-36 rounded-full bg-black/10" />
+        <div className="max-w-lg mx-auto relative z-10">
+          <div className="flex items-center justify-between mb-1">
             <div>
-              <p className="text-primary-foreground/70 text-sm">{t.welcome} 👋</p>
-              <h1 className="text-xl font-bold">{t.app_name}</h1>
+              <p className="text-primary-foreground/60 text-xs tracking-widest uppercase font-medium">{t.welcome} 👋</p>
+              <h1 className="text-2xl font-extrabold tracking-tight mt-0.5">{t.app_name}</h1>
+              <p className="text-primary-foreground/60 text-xs mt-0.5">{t.app_tagline}</p>
             </div>
-            <Link to="/settings" className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+            <Link to="/settings" className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/20">
               <span className="text-sm font-bold">{lang === 'ar' ? 'EN' : 'ع'}</span>
             </Link>
           </div>
 
           {/* Search */}
-          <div className="relative">
+          <div className="relative mt-5">
             <Search className="absolute top-3.5 left-4 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
@@ -79,7 +84,7 @@ export default function Home() {
                   navigate(`/workers?search=${encodeURIComponent(searchQuery)}`);
                 }
               }}
-              className="w-full h-12 pl-11 pr-4 rounded-2xl bg-white/95 text-foreground placeholder:text-muted-foreground text-sm focus:outline-none shadow-md"
+              className="w-full h-12 pl-11 pr-4 rounded-2xl bg-white/95 text-foreground placeholder:text-muted-foreground text-sm focus:outline-none shadow-lg"
             />
           </div>
         </div>
