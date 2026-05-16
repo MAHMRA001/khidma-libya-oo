@@ -7,12 +7,14 @@ import JobCard from "../components/cards/JobCard";
 import { CATEGORIES, CITIES, CITIES_AR } from "../lib/i18n";
 import NativePicker from "../components/common/NativePicker";
 
+const urlParams = new URLSearchParams(window.location.search);
+
 export default function JobPosts() {
   const { t, lang, rtl } = useLanguage();
   const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState(urlParams.get('category') || '');
   const [city, setCity] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
@@ -66,6 +68,22 @@ export default function JobPosts() {
             </div>
           </div>
         )}
+
+        {/* Category chips */}
+        <div className="flex gap-2 overflow-x-auto pb-3 mb-4 no-scrollbar">
+          <button
+            onClick={() => setCategory('')}
+            className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${!category ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'}`}
+          >
+            {t.all_categories}
+          </button>
+          {CATEGORIES.map(cat => (
+            <button key={cat} onClick={() => setCategory(cat === category ? '' : cat)}
+              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${category === cat ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'}`}>
+              {t[cat]}
+            </button>
+          ))}
+        </div>
 
         {loading ? (
           <div className="flex items-center justify-center py-20">

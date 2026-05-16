@@ -69,6 +69,10 @@
     "address": {
       "type": "string"
     },
+    "website": {
+      "type": "string",
+      "description": "Business website URL"
+    },
     "logo": {
       "type": "string"
     },

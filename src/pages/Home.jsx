@@ -174,7 +174,7 @@ export default function Home() {
           </div>
         )}
 
-        {/* Recent Jobs */}
+        {/* Recent Jobs - show only 2 as preview */}
         {jobs.length > 0 && (
           <div className="mb-6">
             <div className="flex items-center justify-between mb-3">
@@ -185,10 +185,15 @@ export default function Home() {
               </Link>
             </div>
             <div className="space-y-3">
-              {jobs.map((job) => (
+              {jobs.slice(0, 2).map((job) => (
                 <JobCard key={job.id} job={job} />
               ))}
             </div>
+            {jobs.length > 2 && (
+              <Link to="/jobs" className="block mt-2 text-center text-xs text-primary font-medium py-2 rounded-xl border border-primary/20 bg-primary/5">
+                {t.view_all} ({jobs.length})
+              </Link>
+            )}
           </div>
         )}
 

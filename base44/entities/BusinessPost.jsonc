@@ -1,0 +1,29 @@
+{
+  "name": "BusinessPost",
+  "type": "object",
+  "properties": {
+    "business_id": {
+      "type": "string",
+      "description": "ID of the business that posted"
+    },
+    "business_name": {
+      "type": "string"
+    },
+    "owner_email": {
+      "type": "string"
+    },
+    "caption": {
+      "type": "string",
+      "description": "Post caption / text"
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "business_id"
+  ]
+}

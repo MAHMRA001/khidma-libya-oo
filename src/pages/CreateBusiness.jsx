@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Camera } from "lucide-react";
+import { ArrowLeft, Camera, Plus, X, Globe } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import useLanguage from "../hooks/useLanguage";
 import { CATEGORIES, CITIES, CITIES_AR } from "../lib/i18n";
@@ -19,8 +19,11 @@ export default function CreateBusiness() {
     business_name: '', business_name_ar: '', category: '', city: '',
     description: '', description_ar: '', phone: '', whatsapp: '',
     address: '', working_hours: '', working_days: '',
-    service_type: 'both', logo: '',
+    service_type: 'both', logo: '', website: '',
   });
+  const [newPost, setNewPost] = useState({ caption: '', photos: [] });
+  const [posts, setPosts] = useState([]);
+  const [postLoading, setPostLoading] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(async user => {
@@ -35,8 +38,10 @@ export default function CreateBusiness() {
           phone: b.phone || '', whatsapp: b.whatsapp || '',
           address: b.address || '', working_hours: b.working_hours || '',
           working_days: b.working_days || '', service_type: b.service_type || 'both',
-          logo: b.logo || '',
+          logo: b.logo || '', website: b.website || '',
         });
+        const existingPosts = await base44.entities.BusinessPost.filter({ business_id: list[0].id });
+        setPosts(existingPosts);
       }
     });
   }, []);
@@ -46,6 +51,38 @@ export default function CreateBusiness() {
     if (!file) return;
     const { file_url } = await base44.integrations.Core.UploadFile({ file });
     setForm(p => ({ ...p, logo: file_url }));
+  };
+
+  const handlePostPhotoUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    const urls = await Promise.all(files.map(async f => {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file: f });
+      return file_url;
+    }));
+    setNewPost(p => ({ ...p, photos: [...p.photos, ...urls] }));
+  };
+
+  const submitPost = async () => {
+    if (!existing) { toast.error("Save your business profile first"); return; }
+    if (!newPost.caption && newPost.photos.length === 0) return;
+    setPostLoading(true);
+    const user = await base44.auth.me();
+    const created = await base44.entities.BusinessPost.create({
+      business_id: existing.id,
+      business_name: existing.business_name,
+      owner_email: user.email,
+      caption: newPost.caption,
+      photos: newPost.photos,
+    });
+    setPosts(p => [created, ...p]);
+    setNewPost({ caption: '', photos: [] });
+    setPostLoading(false);
+    toast.success("Post published!");
+  };
+
+  const deletePost = async (postId) => {
+    await base44.entities.BusinessPost.delete(postId);
+    setPosts(p => p.filter(x => x.id !== postId));
   };
 
   const handleSubmit = async () => {
@@ -138,6 +175,11 @@ export default function CreateBusiness() {
           <Input value={form.address} onChange={e => setForm(p => ({ ...p, address: e.target.value }))} className="rounded-xl" />
         </div>
 
+        <div>
+          <label className="text-sm font-medium mb-1.5 block flex items-center gap-1.5"><Globe className="w-4 h-4" /> Website (optional)</label>
+          <Input value={form.website} onChange={e => setForm(p => ({ ...p, website: e.target.value }))} className="rounded-xl" placeholder="https://yourwebsite.com" type="url" />
+        </div>
+
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm font-medium mb-1.5 block">{t.working_hours}</label>
@@ -156,6 +198,58 @@ export default function CreateBusiness() {
         <Button onClick={handleSubmit} disabled={loading} className="w-full h-12 rounded-2xl text-base font-semibold">
           {loading ? t.loading : (existing ? t.save : t.create_business)}
         </Button>
+
+        {/* Posts section — only visible after business is created */}
+        {existing && (
+          <div className="space-y-4 pt-2 border-t border-border">
+            <h2 className="font-bold text-base">Posts</h2>
+
+            {/* New post composer */}
+            <div className="bg-card border border-border rounded-2xl p-4 space-y-3">
+              <Textarea
+                value={newPost.caption}
+                onChange={e => setNewPost(p => ({ ...p, caption: e.target.value }))}
+                placeholder="Share an update, offer, or work photo..."
+                rows={2}
+                className="rounded-xl"
+              />
+              {newPost.photos.length > 0 && (
+                <div className="grid grid-cols-3 gap-2">
+                  {newPost.photos.map((url, i) => (
+                    <div key={i} className="relative">
+                      <img src={url} alt="" className="w-full aspect-square rounded-xl object-cover" />
+                      <button onClick={() => setNewPost(p => ({ ...p, photos: p.photos.filter((_, j) => j !== i) }))} className="absolute top-1 right-1 w-5 h-5 bg-black/60 rounded-full flex items-center justify-center">
+                        <X className="w-3 h-3 text-white" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="flex items-center gap-2">
+                <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border text-xs font-medium cursor-pointer hover:bg-secondary">
+                  <Camera className="w-4 h-4" /> Add Photos
+                  <input type="file" accept="image/*" multiple className="hidden" onChange={handlePostPhotoUpload} />
+                </label>
+                <Button onClick={submitPost} disabled={postLoading} size="sm" className="ml-auto rounded-xl">
+                  {postLoading ? t.loading : "Post"}
+                </Button>
+              </div>
+            </div>
+
+            {/* Existing posts */}
+            {posts.map(post => (
+              <div key={post.id} className="bg-card border border-border rounded-2xl p-4 space-y-2">
+                {post.caption && <p className="text-sm">{post.caption}</p>}
+                {post.photos?.length > 0 && (
+                  <div className="grid grid-cols-3 gap-2">
+                    {post.photos.map((url, i) => <img key={i} src={url} alt="" className="w-full aspect-square rounded-xl object-cover" />)}
+                  </div>
+                )}
+                <button onClick={() => deletePost(post.id)} className="text-xs text-destructive hover:underline">Delete</button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

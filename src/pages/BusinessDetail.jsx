@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Phone, MessageCircle, MapPin, Clock, Star, BadgeCheck, Calendar } from "lucide-react";
+import { ArrowLeft, Phone, MessageCircle, MapPin, Clock, Star, BadgeCheck, Calendar, Globe } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import useLanguage from "../hooks/useLanguage";
 import CategoryIcon from "../components/common/CategoryIcon";
@@ -17,13 +17,17 @@ export default function BusinessDetail() {
   const navigate = useNavigate();
   const { t, lang, rtl } = useLanguage();
   const [biz, setBiz] = useState(null);
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [bookOpen, setBookOpen] = useState(false);
   const [booking, setBooking] = useState(false);
   const [form, setForm] = useState({ customer_phone: '', service_description: '', preferred_date: '', preferred_time: '', appointment_type: 'walk_in', address: '', notes: '' });
 
   useEffect(() => {
-    base44.entities.BusinessProfile.get(id).then(b => { setBiz(b); setLoading(false); });
+    Promise.all([
+      base44.entities.BusinessProfile.get(id),
+      base44.entities.BusinessPost.filter({ business_id: id }, '-created_date', 20),
+    ]).then(([b, p]) => { setBiz(b); setPosts(p); setLoading(false); });
   }, [id]);
 
   const submitBooking = async () => {
@@ -96,6 +100,14 @@ export default function BusinessDetail() {
                 <span>{biz.working_hours}{biz.working_days ? ` · ${biz.working_days}` : ''}</span>
               </div>
             )}
+            {biz.website && (
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Globe className="w-4 h-4 flex-shrink-0" />
+                <a href={biz.website} target="_blank" rel="noopener noreferrer" className="text-primary underline truncate">
+                  {biz.website.replace(/^https?:\/\//, '')}
+                </a>
+              </div>
+            )}
           </div>
 
           <p className="text-sm text-foreground leading-relaxed mb-4">
@@ -130,7 +142,7 @@ export default function BusinessDetail() {
         {/* Book Appointment */}
         <Dialog open={bookOpen} onOpenChange={setBookOpen}>
           <DialogTrigger asChild>
-            <Button className="w-full h-12 rounded-2xl gap-2 text-base font-semibold">
+            <Button className="w-full h-12 rounded-2xl gap-2 text-base font-semibold mb-4">
               <Calendar className="w-5 h-5" /> {t.book_appointment}
             </Button>
           </DialogTrigger>
@@ -178,6 +190,30 @@ export default function BusinessDetail() {
             </div>
           </DialogContent>
         </Dialog>
+
+        {/* Posts Feed */}
+        {posts.length > 0 && (
+          <div className="space-y-4">
+            <h2 className="font-bold text-base">Posts</h2>
+            {posts.map(post => (
+              <div key={post.id} className="bg-card border border-border rounded-2xl p-4 space-y-3">
+                {post.photos?.length > 0 && (
+                  post.photos.length === 1 ? (
+                    <img src={post.photos[0]} alt="" className="w-full rounded-xl object-cover max-h-72" />
+                  ) : (
+                    <div className="grid grid-cols-2 gap-2">
+                      {post.photos.map((url, i) => <img key={i} src={url} alt="" className="w-full aspect-square rounded-xl object-cover" />)}
+                    </div>
+                  )
+                )}
+                {post.caption && <p className="text-sm leading-relaxed">{post.caption}</p>}
+                <p className="text-[10px] text-muted-foreground">
+                  {new Date(post.created_date).toLocaleDateString()}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
