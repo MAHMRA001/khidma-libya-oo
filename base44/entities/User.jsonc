@@ -6,31 +6,25 @@
       "type": "string",
       "enum": [
         "admin",
-        "customer",
-        "worker"
+        "user"
       ],
-      "default": "customer"
-    },
-    "phone": {
-      "type": "string"
-    },
-    "preferred_language": {
-      "type": "string",
-      "enum": [
-        "en",
-        "ar"
-      ],
-      "default": "en"
+      "default": "user"
     },
     "account_type": {
       "type": "string",
       "enum": [
         "customer",
-        "worker"
-      ],
-      "default": "customer"
+        "worker",
+        "both"
+      ]
     },
     "city": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "phone": {
       "type": "string"
     }
   }
