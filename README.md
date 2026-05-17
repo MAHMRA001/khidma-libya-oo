@@ -1,39 +1,56 @@
-**Welcome to your Base44 project** 
+# Khidma Libya Connect
 
-**About**
+Khidma Libya Connect is a service marketplace app designed for workers and customers in Libya.  
+The app helps people find jobs, offer services, and connect easily in one platform.
 
-View and Edit  your app on [Base44.com](http://Base44.com) 
+## Features
 
-This project contains everything you need to run your app locally.
+- User registration and login
+- Worker profiles with photos and service descriptions
+- Post job offers and requests
+- Location-based services
+- Ratings and reviews
+- Chat/contact between workers and clients
+- Admin panel for managing users and posts
+- Users can delete their own posts
+- Secure verification using ID or passport
 
-**Edit the code in your local development environment**
+## Target Users
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
+The app is designed for:
+- Freelancers
+- Mechanics
+- Electricians
+- Painters
+- Barbers
+- Delivery workers
+- Any person looking for work opportunities in Libya
 
-**Prerequisites:** 
+## Technologies
 
-1. Clone the repository using the project's Git URL 
-2. Navigate to the project directory
-3. Install dependencies: `npm install`
-4. Create an `.env.local` file and set the right environment variables
+- Base44
+- AI-generated backend support
+- Responsive mobile-friendly design
 
-```
-VITE_BASE44_APP_ID=your_app_id
-VITE_BASE44_APP_BASE_URL=your_backend_url
+## Goal of the Project
 
-e.g.
-VITE_BASE44_APP_ID=cbef744a8545c389ef439ea6
-VITE_BASE44_APP_BASE_URL=https://my-to-do-list-81bfaad7.base44.app
-```
+The goal of Khidma Libya Connect is to reduce unemployment and make it easier for workers to find customers without waiting in the streets for job opportunities.
 
-Run the app: `npm run dev`
+The app gives workers more independence, visibility, and better income opportunities.
 
-**Publish your changes**
+## Future Improvements
 
-Open [Base44.com](http://Base44.com) and click on Publish.
+- In-app chat system
+- Online payment integration
+- Push notifications
+- Arabic and English support
+- Mobile application for Android and iOS
+- Worker verification badges
 
-**Docs & Support**
+## Project Status
 
-Documentation: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
+The project is currently in development and prototype phase.
 
-Support: [https://app.base44.com/support](https://app.base44.com/support)
+## Developer
+
+Developed by Mahmoud Mraiwa
