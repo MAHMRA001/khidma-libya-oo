@@ -74,35 +74,6 @@ const AnimatedRoutes = () => {
 };
 
 const AuthenticatedApp = () => {
-const { isLoadingAuth, isLoadingPublicSettings, authError, user } = useAuth();
-
-  if (isLoadingPublicSettings || isLoadingAuth) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  // New user with no account type yet → onboarding to pick role
-  if (!isLoadingAuth && !isLoadingPublicSettings && !authError && user && !user.account_type) {
-    const blocked = ['/onboarding', '/welcome', '/create-worker-profile'];
-    if (!blocked.some(p => window.location.pathname.startsWith(p))) {
-      window.location.replace('/onboarding');
-      return null;
-    }
-  }
-
-  if (authError) {
-    if (authError.type === 'user_not_registered') {
-      return <UserNotRegisteredError />;
-    }} else if (authError.type === 'auth_required') {
-  return <AnimatedRoutes />;
-}
-      return null;
-    }
-  }
-
   return <AnimatedRoutes />;
 };
 

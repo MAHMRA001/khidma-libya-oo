@@ -1,14 +1,9 @@
-import { useEffect } from "react";
-
 export default function Login() {
-  useEffect(() => {
-    window.location.replace("?/#/welcome");
-  }, []);
-
   return (
     <div style={{ padding: "40px", textAlign: "center" }}>
-      <h1>Redirecting...</h1>
-      <p>Please wait.</p>
+      <h1>Login disabled</h1>
+      <p>This GitHub Pages version runs without login.</p>
+      <a href="/#/welcome">Go to Home</a>
     </div>
   );
 }
