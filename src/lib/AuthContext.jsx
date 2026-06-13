@@ -6,18 +6,22 @@ import { createAxiosClient } from '@base44/sdk/dist/utils/axios-client';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoadingAuth, setIsLoadingAuth] = useState(true);
-  const [isLoadingPublicSettings, setIsLoadingPublicSettings] = useState(true);
+  const [user, setUser] = useState({ account_type: "client" });
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isLoadingAuth, setIsLoadingAuth] = useState(false);
+  const [isLoadingPublicSettings, setIsLoadingPublicSettings] = useState(false);
   const [authError, setAuthError] = useState(null);
-  const [authChecked, setAuthChecked] = useState(false);
-  const [appPublicSettings, setAppPublicSettings] = useState(null); // Contains only { id, public_settings }
-
-  useEffect(() => {
-    checkAppState();
-  }, []);
-
+  const [authChecked, setAuthChecked] = useState(true);
+  const [appPublicSettings, setAppPublicSettings] = useState({ id: "public", public_settings: {} });
+useEffect(() => {
+  setUser({ account_type: "client" });
+  setIsAuthenticated(true);
+  setIsLoadingAuth(false);
+  setIsLoadingPublicSettings(false);
+  setAuthError(null);
+  setAuthChecked(true);
+  setAppPublicSettings({ id: "public", public_settings: {} });
+}, []);
   const checkAppState = async () => {
     try {
       setIsLoadingPublicSettings(true);
