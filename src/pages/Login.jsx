@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 export default function Login() {
   useEffect(() => {
-    window.location.href = "/";
+    window.location.replace("/welcome");
   }, []);
 
   return (
