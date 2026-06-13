@@ -1,18 +1,19 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { base44 } from '@/api/base44Client';
 
 const AuthContext = createContext();
 
-const staticUser = {
+const guestUser = {
   id: 'guest',
-  email: 'guest@khedma313libya.com',
+  email: '',
   full_name: 'Guest User',
   account_type: 'client',
-  role: 'user',
+  role: 'guest',
 };
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(staticUser);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [user, setUser] = useState(guestUser);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(false);
   const [isLoadingPublicSettings, setIsLoadingPublicSettings] = useState(false);
   const [authError, setAuthError] = useState(null);
@@ -23,25 +24,11 @@ export const AuthProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    setUser(staticUser);
-    setIsAuthenticated(true);
-    setIsLoadingAuth(false);
-    setIsLoadingPublicSettings(false);
-    setAuthError(null);
-    setAuthChecked(true);
-    setAppPublicSettings({
-      id: 'public',
-      public_settings: {},
-    });
+    checkUserAuth();
   }, []);
 
   const checkAppState = async () => {
-    setUser(staticUser);
-    setIsAuthenticated(true);
-    setIsLoadingAuth(false);
     setIsLoadingPublicSettings(false);
-    setAuthError(null);
-    setAuthChecked(true);
     setAppPublicSettings({
       id: 'public',
       public_settings: {},
@@ -49,21 +36,33 @@ export const AuthProvider = ({ children }) => {
   };
 
   const checkUserAuth = async () => {
-    setUser(staticUser);
-    setIsAuthenticated(true);
+    const currentUser = await base44.auth.me();
+
+    setUser(currentUser);
+    setIsAuthenticated(Boolean(currentUser.email));
     setIsLoadingAuth(false);
     setAuthChecked(true);
     setAuthError(null);
   };
 
-  const logout = () => {
-    setUser(staticUser);
+  const loginWithEmail = async (email) => {
+    const loggedInUser = await base44.auth.loginWithEmail(email);
+
+    setUser(loggedInUser);
     setIsAuthenticated(true);
-    window.location.hash = '#/welcome';
+    setAuthError(null);
+
+    return loggedInUser;
+  };
+
+  const logout = () => {
+    base44.auth.logout();
+    setUser(guestUser);
+    setIsAuthenticated(false);
   };
 
   const navigateToLogin = () => {
-    window.location.hash = '#/welcome';
+    window.location.hash = '#/login';
   };
 
   return (
@@ -80,6 +79,7 @@ export const AuthProvider = ({ children }) => {
         navigateToLogin,
         checkUserAuth,
         checkAppState,
+        loginWithEmail,
       }}
     >
       {children}
