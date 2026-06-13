@@ -74,7 +74,7 @@ const AnimatedRoutes = () => {
 };
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin, user } = useAuth();
+const { isLoadingAuth, isLoadingPublicSettings, authError, user } = useAuth();
 
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
@@ -96,8 +96,9 @@ const AuthenticatedApp = () => {
   if (authError) {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
-    } else if (authError.type === 'auth_required') {
-      navigateToLogin();
+    }} else if (authError.type === 'auth_required') {
+  return <AnimatedRoutes />;
+}
       return null;
     }
   }
