@@ -26,7 +26,7 @@ import Onboarding from './pages/Onboarding';
 import Businesses from './pages/Businesses';
 import BusinessDetail from './pages/BusinessDetail';
 import CreateBusiness from './pages/CreateBusiness';
-
+import Login from './pages/Login';
 
 
 const TAB_PATHS_ANIM = ['/', '/jobs', '/messages', '/profile'];
@@ -65,6 +65,7 @@ const AnimatedRoutes = () => {
             <Route path="/create-business" element={<CreateBusiness />} />
           </Route>
           <Route path="/chat/:id" element={<Chat />} />
+          <Route path="/login" element={<Login />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </motion.div>
