@@ -132,7 +132,7 @@ useEffect(() => {
   };
 
  const navigateToLogin = () => {
-  window.location.replace("/welcome");
+  window.location.replace("/#/welcome");
 };
 
   return (
