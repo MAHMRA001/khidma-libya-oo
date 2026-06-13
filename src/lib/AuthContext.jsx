@@ -93,31 +93,13 @@ useEffect(() => {
     }
   };
 
-  const checkUserAuth = async () => {
-    try {
-      // Now check if the user is authenticated
-      setIsLoadingAuth(true);
-      const currentUser = await base44.auth.me();
-      setUser(currentUser);
-      setIsAuthenticated(true);
-      setIsLoadingAuth(false);
-      setAuthChecked(true);
-    } catch (error) {
-      console.error('User auth check failed:', error);
-      setIsLoadingAuth(false);
-      setIsAuthenticated(false);
-      setAuthChecked(true);
-      
-      // If user auth fails, it might be an expired token
-      if (error.status === 401 || error.status === 403) {
-        setAuthError({
-          type: 'auth_required',
-          message: 'Authentication required'
-        });
-      }
-    }
-  };
-
+ const checkUserAuth = async () => {
+  setUser({ account_type: "client" });
+  setIsAuthenticated(true);
+  setIsLoadingAuth(false);
+  setAuthChecked(true);
+  setAuthError(null);
+};
   const logout = (shouldRedirect = true) => {
     setUser(null);
     setIsAuthenticated(false);
@@ -132,7 +114,7 @@ useEffect(() => {
   };
 
  const navigateToLogin = () => {
-  window.location.replace("/#/welcome");
+  console.log("Login redirect disabled on GitHub Pages");
 };
 
   return (
