@@ -27,5 +27,11 @@
     "phone": {
       "type": "string"
     }
-  }
+  },
+  "required": [
+    "account_type",
+    "city",
+    "address",
+    "phone"
+  ]
 }
